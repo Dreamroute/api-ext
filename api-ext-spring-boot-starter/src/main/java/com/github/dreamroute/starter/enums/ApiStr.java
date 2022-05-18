@@ -52,7 +52,7 @@ public @interface ApiStr {
     /**
      * 是否隐藏，默认：false
      */
-    boolean hidden() default false;
+    boolean hidden() default true;
 
     /**
      * 错误信息描述，无需填写，自动生成

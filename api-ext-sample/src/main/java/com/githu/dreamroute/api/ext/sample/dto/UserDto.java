@@ -20,6 +20,8 @@ public class UserDto {
         @ApiStr(name = "姓名", max = 10, min = 2)
         private String name;
 
+        private String reamark;
+
         private Integer age;
 
         private BigDecimal price;

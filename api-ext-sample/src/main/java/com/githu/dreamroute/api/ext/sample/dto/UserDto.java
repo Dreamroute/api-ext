@@ -1,6 +1,6 @@
 package com.githu.dreamroute.api.ext.sample.dto;
 
-import com.github.dreamroute.starter.enums.ApiStr;
+import com.github.dreamroute.starter.constraints.ApiStr;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

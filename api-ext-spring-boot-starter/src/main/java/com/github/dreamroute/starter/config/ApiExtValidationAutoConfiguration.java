@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.boot.validation.MessageInterpolatorFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Role;
@@ -36,6 +37,7 @@ import javax.validation.executable.ExecutableValidator;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(ExecutableValidator.class)
+@ComponentScan("com.github.dreamroute.starter")
 @ConditionalOnResource(resources = "classpath:META-INF/services/javax.validation.spi.ValidationProvider")
 @Import(ApiExtPrimaryDefaultValidatorPostProcessor.class)
 @AutoConfigureBefore(ValidationAutoConfiguration.class)

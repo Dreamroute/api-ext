@@ -1,7 +1,7 @@
-package com.github.dreamroute.starter.enums;
+package com.github.dreamroute.starter.constraints;
 
-import com.github.dreamroute.starter.enums.ApiStr.List;
-import com.github.dreamroute.starter.enums.validator.ApiStrValidator;
+import com.github.dreamroute.starter.constraints.ApiStr.List;
+import com.github.dreamroute.starter.constraints.validator.ApiStrValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -30,14 +30,19 @@ public @interface ApiStr {
     String name();
 
     /**
-     * 是否必填，默认：true
+     * 是否必填，默认为：true，如果为true，那么就不能是<code>null</code>或者空字符串
      */
     boolean required() default true;
 
     /**
-     * 是否可以为空
+     * 是否隐藏
      */
-    boolean notEmpty() default false;
+    boolean hidden() default false;
+
+    /**
+     * 错误信息描述，无需填写，自动生成
+     */
+    String message() default "";
 
     /**
      * 最小长度
@@ -48,16 +53,6 @@ public @interface ApiStr {
      * 最大长度
      */
     int max();
-
-    /**
-     * 是否隐藏，默认：false
-     */
-    boolean hidden() default true;
-
-    /**
-     * 错误信息描述，无需填写，自动生成
-     */
-    String message() default "";
 
     Class<?>[] groups() default {};
 

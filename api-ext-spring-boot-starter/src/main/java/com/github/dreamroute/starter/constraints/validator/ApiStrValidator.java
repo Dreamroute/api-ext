@@ -1,7 +1,7 @@
-package com.github.dreamroute.starter.enums.validator;
+package com.github.dreamroute.starter.constraints.validator;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.dreamroute.starter.enums.ApiStr;
+import com.github.dreamroute.starter.constraints.ApiStr;
 import lombok.Data;
 import org.springframework.core.annotation.AnnotationUtils;
 

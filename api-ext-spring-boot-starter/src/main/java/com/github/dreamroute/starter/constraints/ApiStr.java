@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @author w.dehi.2022-05-17
  */
+@ApiExtMarker
 @Target(FIELD)
 @Retention(RUNTIME)
 @Repeatable(List.class)

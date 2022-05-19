@@ -1,11 +1,13 @@
 package com.github.dreamroute.starter.config;
 
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 
 import javax.validation.MessageInterpolator;
 import java.lang.annotation.Annotation;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author w.dehi.2022-05-17
@@ -21,8 +23,9 @@ public class ApiExtInterpolator implements MessageInterpolator {
 
     @Override
     public String interpolate(String message, Context context) {
-        Annotation annotation = context.getConstraintDescriptor().getAnnotation();
+        Annotation apiExtAnnotation = context.getConstraintDescriptor().getAnnotation();
         StringBuilder builder = new StringBuilder();
+        Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(apiExtAnnotation);
 //        if (annotation instanceof ApiStr) {
 //            ApiStr as = (ApiStr) annotation;
 //            builder.append(as.name());

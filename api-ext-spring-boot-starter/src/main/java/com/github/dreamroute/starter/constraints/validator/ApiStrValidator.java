@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author w.dehi.2022-05-17
  */
-public class ApiStrValidator implements ConstraintValidator<ApiStr, Object> {
+public class ApiStrValidator implements ConstraintValidator<ApiStr, String> {
 
     private BaseAttr baseAttr;
     private int min;
@@ -30,8 +30,10 @@ public class ApiStrValidator implements ConstraintValidator<ApiStr, Object> {
     }
 
     @Override
-    public boolean isValid(Object value, ConstraintValidatorContext context) {
-        
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (baseAttr.required) {
+            return value != null && (value = value.trim()).length() >= min && value.length() <= max;
+        }
         return false;
     }
 
@@ -39,7 +41,6 @@ public class ApiStrValidator implements ConstraintValidator<ApiStr, Object> {
     private static class BaseAttr {
         private String name;
         private boolean required;
-        private boolean notEmpty;
         private boolean hidden;
         private String message;
     }

@@ -20,6 +20,7 @@ public class UserDto {
         @ApiStr(name = "姓名", max = 10, min = 2)
         private String name;
 
+        @ApiStr(name = "备注", max = 10, min = 2, required = false)
         private String reamark;
 
         private Integer age;

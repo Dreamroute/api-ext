@@ -1,7 +1,7 @@
 package com.github.dreamroute.starter.constraints;
 
-import com.github.dreamroute.starter.constraints.ApiStr.List;
-import com.github.dreamroute.starter.constraints.validator.ApiStrValidator;
+import com.github.dreamroute.starter.constraints.ApiExtLong.List;
+import com.github.dreamroute.starter.constraints.validator.ApiExtLongValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -14,7 +14,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 描述：字符串
+ * 描述：{@link Long}类型校验
  *
  * @author w.dehi.2022-05-17
  */
@@ -22,8 +22,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 @Retention(RUNTIME)
 @Repeatable(List.class)
-@Constraint(validatedBy = {ApiStrValidator.class})
-public @interface ApiStr {
+@Constraint(validatedBy = {ApiExtLongValidator.class})
+public @interface ApiExtLong {
 
     /**
      * 字段名称
@@ -41,19 +41,19 @@ public @interface ApiStr {
     boolean hidden() default false;
 
     /**
-     * 错误信息描述，无需填写，自动生成，需要required = true时才生效
+     * 错误信息描述，无需填写，自定义使用${}占位
      */
-    String message() default "${name}不允许为空, 长度范围在${min}, ${max}之间";
+    String message() default "[${name}]${required}长度范围在[${min}至${max}]之间";
 
     /**
      * 最小长度
      */
-    int min();
+    long min();
 
     /**
      * 最大长度
      */
-    int max();
+    long max();
 
     Class<?>[] groups() default {};
 
@@ -63,6 +63,6 @@ public @interface ApiStr {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        ApiStr[] value();
+        ApiExtLong[] value();
     }
 }

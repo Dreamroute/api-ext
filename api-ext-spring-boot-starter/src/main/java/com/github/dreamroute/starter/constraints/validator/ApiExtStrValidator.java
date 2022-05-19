@@ -1,7 +1,7 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.dreamroute.starter.constraints.ApiStr;
+import com.github.dreamroute.starter.constraints.ApiExtStr;
 import lombok.Data;
 import org.springframework.core.annotation.AnnotationUtils;
 
@@ -9,19 +9,21 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Map;
 
+import static org.springframework.util.StringUtils.isEmpty;
+
 /**
- * 描述：字符串校验器
+ * 描述：{@link String}校验器
  *
  * @author w.dehi.2022-05-17
  */
-public class ApiStrValidator implements ConstraintValidator<ApiStr, String> {
+public class ApiExtStrValidator implements ConstraintValidator<ApiExtStr, String> {
 
     private BaseAttr baseAttr;
     private int min;
     private int max;
 
     @Override
-    public void initialize(ApiStr anno) {
+    public void initialize(ApiExtStr anno) {
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
         JSONObject jo = new JSONObject(attrs);
         baseAttr = jo.toJavaObject(BaseAttr.class);
@@ -32,9 +34,10 @@ public class ApiStrValidator implements ConstraintValidator<ApiStr, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (baseAttr.required) {
-            return value != null && (value = value.trim()).length() >= min && value.length() <= max;
+            return !isEmpty(value) && value.length() >= min && value.length() <= max;
+        } else {
+            return isEmpty(value) || (value.length() >= min && value.length() <= max);
         }
-        return false;
     }
 
     @Data

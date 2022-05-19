@@ -16,33 +16,24 @@ import java.util.Map;
  */
 public class ApiExtLongValidator implements ConstraintValidator<ApiExtLong, Long> {
 
-    private BaseAttr baseAttr;
+    private boolean required;
     private Long min;
     private Long max;
 
     @Override
     public void initialize(ApiExtLong anno) {
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
-        JSONObject jo = new JSONObject(attrs);
-        baseAttr = jo.toJavaObject(BaseAttr.class);
         max = (Long) attrs.get("max");
         min = (Long) attrs.get("min");
+        required = (boolean) AnnotationUtils.getValue(anno, "required");
     }
 
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-        if (baseAttr.required) {
+        if (required) {
             return value != null && value >= min && value <= max;
         } else {
             return value == null || (value >= min && value <= max);
         }
-    }
-
-    @Data
-    private static class BaseAttr {
-        private String name;
-        private boolean required;
-        private boolean hidden;
-        private String message;
     }
 }

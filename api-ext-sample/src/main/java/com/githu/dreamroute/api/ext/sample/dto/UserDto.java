@@ -3,10 +3,14 @@ package com.githu.dreamroute.api.ext.sample.dto;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
 import com.github.dreamroute.starter.constraints.ApiExtInteger;
 import com.github.dreamroute.starter.constraints.ApiExtLong;
+import com.github.dreamroute.starter.constraints.ApiExtObject;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -35,7 +39,18 @@ public class UserDto {
         @ApiExtBigDecimal(name = "单价", max = "10.5", min = "0.2", required = false)
         private BigDecimal price;
 
+        @ApiExtObject(name = "状态")
         private Status status;
+
+        @Valid
+        @NotEmpty
+        private Role[] roles;
+    }
+
+    @Data
+    public static class Role {
+        @NotNull(message = "角色名不能为空")
+        private String name;
     }
 
     public enum Status {

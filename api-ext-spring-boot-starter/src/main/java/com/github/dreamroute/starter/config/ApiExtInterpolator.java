@@ -20,6 +20,8 @@ public class ApiExtInterpolator implements MessageInterpolator {
 
     private final MessageInterpolator targetInterpolator;
 
+    private static final String NOT_EMPTY = "不允许为空";
+
     public ApiExtInterpolator(MessageInterpolator targetInterpolator) {
         Assert.notNull(targetInterpolator, "Target MessageInterpolator must not be null");
         this.targetInterpolator = targetInterpolator;
@@ -36,12 +38,18 @@ public class ApiExtInterpolator implements MessageInterpolator {
             attrs.forEach((k, v) -> properties.put(k.toString(), v.toString()));
             boolean required = (boolean) attrs.get("required");
             if (required) {
-                properties.put("required", "不允许为空, ");
+                properties.put("required", NOT_EMPTY + " ,");
             } else {
                 properties.put("required", "");
             }
             PropertyPlaceholderHelper helper = new PropertyPlaceholderHelper("${", "}");
-            return helper.replacePlaceholders(message, properties);
+            String result = helper.replacePlaceholders(message, properties);
+
+            // 移除末尾逗号
+            if (result.endsWith(NOT_EMPTY + " ,")) {
+                result = result.replace(NOT_EMPTY + " ,", NOT_EMPTY);
+            }
+            return result;
         }
         return this.targetInterpolator.interpolate(message, context, LocaleContextHolder.getLocale());
     }

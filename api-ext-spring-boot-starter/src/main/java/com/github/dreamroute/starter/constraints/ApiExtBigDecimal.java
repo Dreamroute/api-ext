@@ -10,6 +10,7 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static com.github.dreamroute.starter.constraints.ApiExtMarker.BASE_MSG;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -43,7 +44,7 @@ public @interface ApiExtBigDecimal {
     /**
      * 错误信息描述，无需填写，自定义使用${}占位
      */
-    String message() default "[${name}]${required}大小范围在[${min}至${max}]之间";
+    String message() default BASE_MSG + "大小范围在[${min}至${max}]之间";
 
     /**
      * 最小值

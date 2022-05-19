@@ -15,4 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Inherited
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface ApiExtMarker {}
+public @interface ApiExtMarker {
+
+    String BASE_MSG = "[${name}]${required}";
+
+}

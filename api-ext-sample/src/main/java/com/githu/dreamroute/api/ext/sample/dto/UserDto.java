@@ -4,6 +4,7 @@ import com.github.dreamroute.starter.constraints.ApiStr;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -23,6 +24,7 @@ public class UserDto {
         @ApiStr(name = "备注", max = 10, min = 2, required = false)
         private String reamark;
 
+        @NotNull(message = "年龄不能为空")
         private Integer age;
 
         private BigDecimal price;

@@ -32,7 +32,7 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.plugin
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1) // 需要在ApiModelPropertyPropertyBuilder之后被调用，用于覆盖默认属性
 public class FillBaseProperties implements ModelPropertyBuilderPlugin {
 
-    private static final Set<Class<?>> API_EXT_ANNOS;
+    public static final Set<Class<?>> API_EXT_ANNOS;
     static {
         API_EXT_ANNOS = ClassUtil.scanPackageByAnnotation(ApiExtMarker.class.getPackage().getName(), ApiExtMarker.class);
     }

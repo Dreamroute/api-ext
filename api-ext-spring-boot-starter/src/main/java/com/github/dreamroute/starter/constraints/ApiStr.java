@@ -41,9 +41,9 @@ public @interface ApiStr {
     boolean hidden() default false;
 
     /**
-     * 错误信息描述，无需填写，自动生成
+     * 错误信息描述，无需填写，自动生成，需要required = true时才生效
      */
-    String message() default "";
+    String message() default "${name}不允许为空, 长度范围在${min}, ${max}之间";
 
     /**
      * 最小长度

@@ -47,8 +47,8 @@ public class ProductReq {
 5. 【非必填属性】比如数组、集合的最大长度、最小长度，如果填了就进行校验，否则就不进行校验
 6. 简化`Swagger`和`Validator`校验的注解，去其糟粕取其精华，丢弃不常用注解属性，重新设置默认属性，比如`required = true`
 7. 在使用新的框架的同时，要兼容之前的注解方式，可以搭配使用，不能二选一，让用户为难
-8. 预留扩展位，当用户需要自定义个性化校验规则时，用户可以很轻松自定义校验注解
-9. 移除传统的非空注解，比如`@NotNull`、`@NotEmpty`、`@NotEmpty`等，与Swagger的`required`进行合并，当`required = true`时，就代表非空，所有注解都满足这一条件
+8. 移除传统的非空注解，比如`@NotNull`、`@NotEmpty`、`@NotEmpty`等，与Swagger的`required`进行合并，当`required = true`时，就代表非空，所有注解都满足这一条件
+9. 预留扩展位，当用户需要自定义个性化校验规则时，用户可以很轻松自定义校验注解（使用Spring SPI Provider技术）
 
 ### 版本：
 * spring boot: 2+

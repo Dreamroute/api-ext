@@ -33,7 +33,7 @@ public class ProductReq {
         @ApiExtBigDecimal(name = "单价", max = "9999999999.9999", min = "0")
         private BigDecimal price;
         
-        // 校验不通过自动生成：单价不能为空，大小范围在[0至9999999999.9999之间
+        // 校验不通过自动生成：单价不能为空，大小范围在[0至9999999999.9999]之间
 
     }
 ```

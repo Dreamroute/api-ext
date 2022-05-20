@@ -42,9 +42,19 @@ public @interface ApiExtArray {
     boolean hidden() default false;
 
     /**
+     * 数组元素最小个数
+     */
+    int min() default 1;
+
+    /**
+     * 数组元素最大个数
+     */
+    int max() default Integer.MAX_VALUE;
+
+    /**
      * 错误信息描述，无需填写，自定义使用${}占位
      */
-    String message() default BASE_MSG;
+    String message() default BASE_MSG + "${name}数量范围在[${min}至${max}]之间";
 
     Class<?>[] groups() default {};
 

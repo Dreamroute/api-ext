@@ -1,5 +1,7 @@
 package com.github.dreamroute.starter.config;
 
+import com.github.dreamroute.starter.constraints.ApiExtDate;
+import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
@@ -49,9 +51,28 @@ public class ApiExtInterpolator implements MessageInterpolator {
             if (result.endsWith(NOT_EMPTY + ",")) {
                 result = result.replace(NOT_EMPTY + ",", NOT_EMPTY);
             }
+
+            // ---------对于不太好处理的就放在这里做特殊处理
+            // 特殊处理日期类型，因为日期类型不太好使用模版来定义错误信息
+            if (apiExtAnnotation.annotationType() == ApiExtDate.class) {
+                result = processDateMsg(attrs, result);
+            }
+            // -----------
+
             return result;
         }
         return this.targetInterpolator.interpolate(message, context, LocaleContextHolder.getLocale());
+    }
+
+    private String processDateMsg(Map<String, Object> attrs, String result) {
+        switch ((Phase) attrs.get("phase")) {
+            case Past: result += ", 并且需要小于当前时间"; break;
+            case PastOrPresent: result += ", 并且需要小于等于当前时间"; break;
+            case Future: result += ", 并且需要大于当前时间"; break;
+            case FutureOrPresent: result += ", 并且需要大于等于当前时间"; break;
+            default: {}
+        }
+        return result;
     }
 
     @Override

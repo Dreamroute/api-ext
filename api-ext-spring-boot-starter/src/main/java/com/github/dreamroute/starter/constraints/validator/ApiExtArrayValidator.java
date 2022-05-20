@@ -1,6 +1,7 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.github.dreamroute.starter.constraints.ApiExtArray;
+import javafx.scene.shape.VLineTo;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,17 +14,23 @@ import javax.validation.ConstraintValidatorContext;
 public class ApiExtArrayValidator implements ConstraintValidator<ApiExtArray, Object[]> {
 
     private boolean required;
+    private int min;
+    private int max;
 
     @Override
     public void initialize(ApiExtArray anno) {
         required = anno.required();
+        min = anno.min();
+        max = anno.max();
     }
 
     @Override
     public boolean isValid(Object[] value, ConstraintValidatorContext context) {
+        min = Math.max(1, min);
         if (required) {
-            return value != null && value.length > 0;
+            return value != null && value.length >= min && value.length <= max;
+        } else {
+            return value == null || value.length == 0 || (value.length >= min && value.length <= max);
         }
-        return true;
     }
 }

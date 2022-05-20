@@ -14,17 +14,23 @@ import java.util.Collection;
 public class ApiExtCollectionValidator implements ConstraintValidator<ApiExtCollection, Collection<?>> {
 
     private boolean required;
+    private int min;
+    private int max;
 
     @Override
     public void initialize(ApiExtCollection anno) {
         required = anno.required();
+        min = anno.min();
+        max = anno.max();
     }
 
     @Override
     public boolean isValid(Collection<?> value, ConstraintValidatorContext context) {
+        min = Math.max(1, min);
         if (required) {
-            return value != null && !value.isEmpty();
+            return value != null && value.size() >= min && value.size() <= max;
+        } else {
+            return value == null || value.isEmpty() || (value.size() >= min && value.size() <= max);
         }
-        return true;
     }
 }

@@ -3,6 +3,8 @@ package com.githu.dreamroute.api.ext.sample.dto;
 import com.github.dreamroute.starter.constraints.ApiExtArray;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
 import com.github.dreamroute.starter.constraints.ApiExtCollection;
+import com.github.dreamroute.starter.constraints.ApiExtDate;
+import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
 import com.github.dreamroute.starter.constraints.ApiExtInteger;
 import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtObject;
@@ -10,14 +12,13 @@ import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +51,9 @@ public class UserDto {
         @ApiExtObject(name = "状态", required = false)
         private Status status;
 
+        @ApiExtDate(name = "出生日期", phase = Phase.PastOrPresent)
+        private Date birthday;
+
         @Valid
         @ApiExtArray(name = "角色列表")
         private Role[] roles;
@@ -64,7 +68,7 @@ public class UserDto {
         @ApiExtCollection(name = "地址")
         private List<String> addrs;
 
-        @ApiExtCollection(name = "手机号码")
+        @ApiExtCollection(name = "手机号码", min = 2, max = 5)
         private Set<String> phones;
     }
 

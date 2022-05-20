@@ -15,11 +15,9 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 
@@ -36,8 +34,6 @@ public class FillBaseProperties implements ModelPropertyBuilderPlugin {
     static {
         API_EXT_ANNOS = ClassUtil.scanPackageByAnnotation(ApiExtMarker.class.getPackage().getName(), ApiExtMarker.class);
     }
-
-    private static final ConcurrentHashMap<Class<?>, ConcurrentHashMap<Field, String>> CACHE = new ConcurrentHashMap<>();
 
     @Override
     public void apply(ModelPropertyContext context) {

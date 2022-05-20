@@ -1,3 +1,5 @@
+# Swagger注解、Java/Hibernate校验注解合并
+
 ### 0. 动机
 1. 我们使用Swagger作为API工具、使用java/Hibernate validator作为请求参数校验时，实体类似这样：
 ```java

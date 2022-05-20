@@ -53,7 +53,7 @@ public class FillBaseProperties implements ModelPropertyBuilderPlugin {
                 ApiExtMarker an = AnnotationUtils.findAnnotation(field, ApiExtMarker.class);
                 if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {
                     for (Class<?> apiExtAnno : API_EXT_ANNOS) {
-                        Map<String, Object> annotationValueMap = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
+                        @SuppressWarnings("unchecked") Map<String, Object> annotationValueMap = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
                         if (!CollectionUtils.isEmpty(annotationValueMap)) {
                             context.getSpecificationBuilder()
                                     .description((String) annotationValueMap.get("name"))

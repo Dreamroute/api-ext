@@ -1,7 +1,6 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.github.dreamroute.starter.constraints.ApiExtObject;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -17,7 +16,7 @@ public class ApiExtObjectValidator implements ConstraintValidator<ApiExtObject, 
 
     @Override
     public void initialize(ApiExtObject anno) {
-        required = (boolean) AnnotationUtils.getValue(anno, "required");
+        required = anno.required();
     }
 
     @Override

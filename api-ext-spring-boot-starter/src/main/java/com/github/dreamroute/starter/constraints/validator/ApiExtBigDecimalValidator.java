@@ -24,7 +24,7 @@ public class ApiExtBigDecimalValidator implements ConstraintValidator<ApiExtBigD
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
         max = new BigDecimal( String.valueOf(attrs.get("max")));
         min = new BigDecimal(String.valueOf(attrs.get("min")));
-        required = (boolean) AnnotationUtils.getValue(anno, "required");
+        required = anno.required();
     }
 
     @Override

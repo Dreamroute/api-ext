@@ -1,8 +1,6 @@
 package com.github.dreamroute.starter.constraints.validator;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.dreamroute.starter.constraints.ApiExtLong;
-import lombok.Data;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.validation.ConstraintValidator;
@@ -25,7 +23,7 @@ public class ApiExtLongValidator implements ConstraintValidator<ApiExtLong, Long
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
         max = (Long) attrs.get("max");
         min = (Long) attrs.get("min");
-        required = (boolean) AnnotationUtils.getValue(anno, "required");
+        required = anno.required();
     }
 
     @Override

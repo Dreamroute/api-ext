@@ -1,7 +1,7 @@
 package com.github.dreamroute.starter.constraints;
 
-import com.github.dreamroute.starter.constraints.ApiExtLong.List;
-import com.github.dreamroute.starter.constraints.validator.ApiExtLongValidator;
+import com.github.dreamroute.starter.constraints.ApiExtDate.List;
+import com.github.dreamroute.starter.constraints.validator.ApiExtStrValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,7 +15,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 描述：{@link Long}类型校验
+ * 描述：{@link java.util.Date}注解，用于限制日期
  *
  * @author w.dehi.2022-05-17
  */
@@ -23,8 +23,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 @Retention(RUNTIME)
 @Repeatable(List.class)
-@Constraint(validatedBy = {ApiExtLongValidator.class})
-public @interface ApiExtLong {
+@Constraint(validatedBy = {ApiExtStrValidator.class})
+public @interface ApiExtDate {
 
     /**
      * 字段名称
@@ -49,12 +49,12 @@ public @interface ApiExtLong {
     /**
      * 最小长度
      */
-    long min();
+    int min();
 
     /**
      * 最大长度
      */
-    long max();
+    int max();
 
     Class<?>[] groups() default {};
 
@@ -64,6 +64,6 @@ public @interface ApiExtLong {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        ApiExtLong[] value();
+        ApiExtDate[] value();
     }
 }

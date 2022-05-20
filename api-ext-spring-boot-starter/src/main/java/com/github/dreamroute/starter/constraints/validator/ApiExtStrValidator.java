@@ -25,7 +25,7 @@ public class ApiExtStrValidator implements ConstraintValidator<ApiExtStr, String
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
         max = (int) attrs.get("max");
         min = (int) attrs.get("min");
-        required = (boolean) AnnotationUtils.getValue(anno, "required");
+        required = anno.required();
     }
 
     @Override

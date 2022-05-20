@@ -32,7 +32,7 @@ public @interface ApiExtInteger {
     String name();
 
     /**
-     * 是否必填，默认为：true，如果为true，那么就不能是<code>null</code>
+     * 是否必填，默认为：true
      */
     boolean required() default true;
 

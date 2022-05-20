@@ -38,16 +38,16 @@ public class ApiExtInterpolator implements MessageInterpolator {
             attrs.forEach((k, v) -> properties.put(k.toString(), v.toString()));
             boolean required = (boolean) attrs.get("required");
             if (required) {
-                properties.put("required", NOT_EMPTY + " ,");
+                properties.put("required", NOT_EMPTY + ",");
             } else {
-                properties.put("required", "");
+                properties.put("required","");
             }
             PropertyPlaceholderHelper helper = new PropertyPlaceholderHelper("${", "}");
             String result = helper.replacePlaceholders(message, properties);
 
             // 移除末尾逗号
-            if (result.endsWith(NOT_EMPTY + " ,")) {
-                result = result.replace(NOT_EMPTY + " ,", NOT_EMPTY);
+            if (result.endsWith(NOT_EMPTY + ",")) {
+                result = result.replace(NOT_EMPTY + ",", NOT_EMPTY);
             }
             return result;
         }

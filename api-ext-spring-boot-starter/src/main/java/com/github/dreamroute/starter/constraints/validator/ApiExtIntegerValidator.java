@@ -23,7 +23,7 @@ public class ApiExtIntegerValidator implements ConstraintValidator<ApiExtInteger
         Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
         max = (Integer) attrs.get("max");
         min = (Integer) attrs.get("min");
-        required = (boolean) AnnotationUtils.getValue(anno, "required");
+        required = anno.required();
     }
 
     @Override

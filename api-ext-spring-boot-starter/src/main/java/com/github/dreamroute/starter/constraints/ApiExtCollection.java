@@ -1,7 +1,7 @@
 package com.github.dreamroute.starter.constraints;
 
-import com.github.dreamroute.starter.constraints.ApiExtLong.List;
-import com.github.dreamroute.starter.constraints.validator.ApiExtLongValidator;
+import com.github.dreamroute.starter.constraints.ApiExtCollection.List;
+import com.github.dreamroute.starter.constraints.validator.ApiExtCollectionValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,7 +15,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 描述：{@link Long}类型校验
+ * 描述：{@link java.util.Collection}注解，校验 {@link java.util.List}和{@link java.util.Set}
  *
  * @author w.dehi.2022-05-17
  */
@@ -23,8 +23,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 @Retention(RUNTIME)
 @Repeatable(List.class)
-@Constraint(validatedBy = {ApiExtLongValidator.class})
-public @interface ApiExtLong {
+@Constraint(validatedBy = {ApiExtCollectionValidator.class})
+public @interface ApiExtCollection {
 
     /**
      * 字段名称
@@ -44,17 +44,7 @@ public @interface ApiExtLong {
     /**
      * 错误信息描述，无需填写，自定义使用${}占位
      */
-    String message() default BASE_MSG + "长度范围在[${min}至${max}]之间";
-
-    /**
-     * 最小长度
-     */
-    long min();
-
-    /**
-     * 最大长度
-     */
-    long max();
+    String message() default BASE_MSG;
 
     Class<?>[] groups() default {};
 
@@ -64,6 +54,6 @@ public @interface ApiExtLong {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        ApiExtLong[] value();
+        ApiExtCollection[] value();
     }
 }

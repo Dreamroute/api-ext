@@ -15,7 +15,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 描述：{@link Object}注解，用于限制字符串
+ * 描述：{@link Object}注解，用于限制基础类型之外的对象类型
  *
  * @author w.dehi.2022-05-17
  */
@@ -32,7 +32,7 @@ public @interface ApiExtObject {
     String name();
 
     /**
-     * 是否必填，默认为：true，如果为true，那么就不能是<code>null</code>或者空字符串
+     * 是否必填，默认为：true
      */
     boolean required() default true;
 

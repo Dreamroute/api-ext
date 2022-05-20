@@ -8,9 +8,15 @@ import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtObject;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -73,4 +79,27 @@ public class UserDto {
         VALID,
         DELETE
     }
+
+    @Data
+    @ApiModel("新增商品对象")
+    public static class ProductReq {
+
+        @ApiModelProperty(value = "单价", required = true)
+        @NotNull(message = "单价不能为空")
+        @DecimalMin(value = "0", message = "单价最小0")
+        @DecimalMax(value = "9999999999.9999", message = "单价不能超过100亿")
+        private BigDecimal price;
+
+    }
+
+    @Data
+    @ApiModel("新增商品对象")
+    public static class ProductRequest {
+
+        @ApiExtBigDecimal(name = "单价", max = "9999999999.9999", min = "0")
+        private BigDecimal price;
+
+    }
+
+
 }

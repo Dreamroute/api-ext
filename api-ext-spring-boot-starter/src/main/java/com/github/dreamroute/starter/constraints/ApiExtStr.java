@@ -49,7 +49,7 @@ public @interface ApiExtStr {
     /**
      * 最小长度
      */
-    int min();
+    int min() default 1;
 
     /**
      * 最大长度

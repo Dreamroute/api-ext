@@ -1,11 +1,9 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.github.dreamroute.starter.constraints.ApiExtStr;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Map;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -17,14 +15,13 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class ApiExtStrValidator implements ConstraintValidator<ApiExtStr, String> {
 
     private boolean required;
-    private int min;
     private int max;
+    private int min;
 
     @Override
     public void initialize(ApiExtStr anno) {
-        Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
-        max = (int) attrs.get("max");
-        min = (int) attrs.get("min");
+        max = anno.max();
+        min = anno.min();
         required = anno.required();
     }
 
@@ -33,7 +30,8 @@ public class ApiExtStrValidator implements ConstraintValidator<ApiExtStr, String
         if (required) {
             return !isEmpty(value) && value.length() >= min && value.length() <= max;
         } else {
-            return isEmpty(value) || (value.length() >= min && value.length() <= max);
+            // required = false时， min无效
+            return isEmpty(value) || value.length() <= max;
         }
     }
 }

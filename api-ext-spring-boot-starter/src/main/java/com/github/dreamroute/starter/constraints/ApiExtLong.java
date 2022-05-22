@@ -44,7 +44,7 @@ public @interface ApiExtLong {
     /**
      * 错误信息描述，无需填写，自定义使用${}占位
      */
-    String message() default BASE_MSG + "长度范围在[${min}至${max}]之间";
+    String message() default BASE_MSG + "大小范围在[${min}至${max}]之间";
 
     /**
      * 最小长度

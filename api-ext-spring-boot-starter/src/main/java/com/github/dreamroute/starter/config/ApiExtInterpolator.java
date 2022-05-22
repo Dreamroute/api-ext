@@ -1,7 +1,10 @@
 package com.github.dreamroute.starter.config;
 
+import com.github.dreamroute.starter.constraints.ApiExtArray;
+import com.github.dreamroute.starter.constraints.ApiExtCollection;
 import com.github.dreamroute.starter.constraints.ApiExtDate;
 import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
+import com.github.dreamroute.starter.constraints.ApiExtStr;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
@@ -13,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.github.dreamroute.starter.constraints.ApiExtMarker.BASE_MSG;
 import static com.github.dreamroute.starter.plugin.FillBaseProperties.API_EXT_ANNOS;
 
 /**
@@ -34,7 +38,8 @@ public class ApiExtInterpolator implements MessageInterpolator {
         Annotation apiExtAnnotation = context.getConstraintDescriptor().getAnnotation();
 
         // 只处理被@ApiExtMarker标记过的注解
-        if (API_EXT_ANNOS.contains(apiExtAnnotation.annotationType())) {
+        Class<? extends Annotation> apiExt = apiExtAnnotation.annotationType();
+        if (API_EXT_ANNOS.contains(apiExt)) {
             Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(apiExtAnnotation);
             Properties properties = new Properties();
             attrs.forEach((k, v) -> properties.put(k.toString(), v.toString()));
@@ -52,10 +57,14 @@ public class ApiExtInterpolator implements MessageInterpolator {
                 result = result.replace(NOT_EMPTY + ",", NOT_EMPTY);
             }
 
-            // ---------对于不太好处理的就放在这里做特殊处理
-            // 特殊处理日期类型，因为日期类型不太好使用模版来定义错误信息
-            if (apiExtAnnotation.annotationType() == ApiExtDate.class) {
+            // ---------对于错误信息不太好处理的就放在这里做特殊处理
+            // 日期类型
+            if (apiExt == ApiExtDate.class) {
                 result = processDateMsg(attrs, result);
+            }
+            // 数组和集合类型
+            else if ((apiExt == ApiExtStr.class || apiExt == ApiExtArray.class || apiExt == ApiExtCollection.class) && !required) {
+                result = helper.replacePlaceholders(BASE_MSG, properties) + "数量必须小于" + attrs.get("max");
             }
             // -----------
 

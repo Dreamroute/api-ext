@@ -1,11 +1,9 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.github.dreamroute.starter.constraints.ApiExtInteger;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Map;
 
 /**
  * 描述：{@link Integer}校验器
@@ -20,9 +18,8 @@ public class ApiExtIntegerValidator implements ConstraintValidator<ApiExtInteger
 
     @Override
     public void initialize(ApiExtInteger anno) {
-        Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
-        max = (Integer) attrs.get("max");
-        min = (Integer) attrs.get("min");
+        max = anno.max();
+        min = anno.min();
         required = anno.required();
     }
 

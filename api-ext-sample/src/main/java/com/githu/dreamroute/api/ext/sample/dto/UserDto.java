@@ -33,7 +33,7 @@ public class UserDto {
     @ApiModel("新增对象")
     public static class InsertReq {
 
-        @ApiExtStr(name = "姓名", max = 10, min = 2)
+        @ApiExtStr(name = "姓名", min = 2, max = 10, required = false)
         private String name;
 
         @ApiExtStr(name = "备注", max = 10, min = 2)
@@ -62,7 +62,7 @@ public class UserDto {
         @ApiExtCollection(name = "角色信息")
         private List<Role> roleList;
 
-        @ApiExtArray(name = "KPI列表")
+        @ApiExtArray(name = "KPI列表", max = 2, required = false)
         private Boolean[] kpis;
 
         @ApiExtCollection(name = "地址")

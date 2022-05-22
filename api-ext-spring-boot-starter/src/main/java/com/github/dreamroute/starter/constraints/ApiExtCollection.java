@@ -54,7 +54,7 @@ public @interface ApiExtCollection {
     /**
      * 错误信息描述，无需填写，自定义使用${}占位
      */
-    String message() default BASE_MSG + "${name}数量范围在[${min}至${max}]之间";
+    String message() default BASE_MSG + "数量范围在[${min}至${max}]之间";
 
     Class<?>[] groups() default {};
 

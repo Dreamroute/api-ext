@@ -1,11 +1,9 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.github.dreamroute.starter.constraints.ApiExtLong;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Map;
 
 /**
  * 描述：{@link Long}校验器
@@ -20,9 +18,8 @@ public class ApiExtLongValidator implements ConstraintValidator<ApiExtLong, Long
 
     @Override
     public void initialize(ApiExtLong anno) {
-        Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(anno);
-        max = (Long) attrs.get("max");
-        min = (Long) attrs.get("min");
+        max = anno.max();
+        min = anno.min();
         required = anno.required();
     }
 

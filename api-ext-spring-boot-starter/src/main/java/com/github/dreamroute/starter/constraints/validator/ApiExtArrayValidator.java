@@ -1,7 +1,6 @@
 package com.github.dreamroute.starter.constraints.validator;
 
 import com.github.dreamroute.starter.constraints.ApiExtArray;
-import javafx.scene.shape.VLineTo;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -26,11 +25,11 @@ public class ApiExtArrayValidator implements ConstraintValidator<ApiExtArray, Ob
 
     @Override
     public boolean isValid(Object[] value, ConstraintValidatorContext context) {
-        min = Math.max(1, min);
         if (required) {
             return value != null && value.length >= min && value.length <= max;
         } else {
-            return value == null || value.length == 0 || (value.length >= min && value.length <= max);
+            // required = false时， min无效
+            return value == null || value.length == 0 || value.length <= max;
         }
     }
 }

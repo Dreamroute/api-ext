@@ -26,11 +26,11 @@ public class ApiExtCollectionValidator implements ConstraintValidator<ApiExtColl
 
     @Override
     public boolean isValid(Collection<?> value, ConstraintValidatorContext context) {
-        min = Math.max(1, min);
         if (required) {
             return value != null && value.size() >= min && value.size() <= max;
         } else {
-            return value == null || value.isEmpty() || (value.size() >= min && value.size() <= max);
+            // required = false时， min无效
+            return value == null || value.isEmpty() || value.size() <= max;
         }
     }
 }

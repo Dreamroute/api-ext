@@ -50,6 +50,7 @@ public class SortProperties {
                     return 0;
                 });
 
+                // 转成linkedhashmap才能保证value排序的正确性
                 Map<String, Schema> sorted = new LinkedHashMap<>();
                 list.forEach(e -> {
                     Schema<?> v = e.getValue();

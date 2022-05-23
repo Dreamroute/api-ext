@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @PostMapping("/insert")
-    public String insert(@Validated @RequestBody InsertReq req) {
-        return "ok";
+    public InsertReq insert(@Validated @RequestBody InsertReq req) {
+        return req;
     }
 
 }

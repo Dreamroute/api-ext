@@ -70,6 +70,7 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                         Map<String, Object> annotationValueMap = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
                         if (!CollectionUtils.isEmpty(annotationValueMap)) {
                             context.getSpecificationBuilder()
+                                    // 使用xml来代表顺序，最后再将其设置成null
                                     .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))))
                                     .description((String) annotationValueMap.get("name"))
                                     .required((Boolean) annotationValueMap.get("required"))

@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ public class UserDto {
     @ApiModel("新增对象")
     public static class InsertReq {
 
+        @ApiModelProperty(allowableValues = "5, 5, 5")
         @ApiExtStr(name = "姓名", min = 2, max = 10, required = false)
         private String name;
 
@@ -70,6 +72,18 @@ public class UserDto {
 
         @ApiExtCollection(name = "手机号码", min = 2, max = 5)
         private Set<String> phones;
+    }
+
+    @Data
+    @ApiModel("新增返回对象")
+    public static class InsertResp implements Serializable {
+        @ApiExtLong(name = "主键", min = 1, max = 100)
+        private Long id;
+        @ApiExtStr(name = "姓名", min = 2)
+        private String name;
+
+        private String[] addrs;
+        private List<Role> rols;
     }
 
     @Data

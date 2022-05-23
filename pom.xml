@@ -35,6 +35,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <hutool-all.version>5.7.13</hutool-all.version>
         <common-util.version>1.2.2</common-util.version>
+        <mybatis-pro.version>1.5.9</mybatis-pro.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
 
     </properties>
@@ -102,6 +103,13 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.dreamroute</groupId>
+            <artifactId>mybatis-pro-base</artifactId>
+            <version>${mybatis-pro.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!--

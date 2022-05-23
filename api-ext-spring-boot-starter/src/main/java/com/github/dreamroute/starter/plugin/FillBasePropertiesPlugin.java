@@ -4,6 +4,8 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
+import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
+import com.github.dreamroute.starter.constraints.ApiExt;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -18,10 +20,13 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.stream.Collectors.joining;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 
 /**
@@ -64,14 +69,35 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                 AnnotatedField af = x.getField();
                 Field field = af.getAnnotated();
                 ApiExtMarker an = AnnotationUtils.findAnnotation(field, ApiExtMarker.class);
-                if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {
+                if (an != null) {
+                    // 使用xml来代表顺序，最后再将其设置成null
+                    context.getSpecificationBuilder()
+                            .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))));
+                    if (EnumMarker.class.isAssignableFrom(field.getType())) {
+                        Class<EnumMarker> c = (Class<EnumMarker>) field.getType();
+                        EnumMarker[] enumConstants = c.getEnumConstants();
+                        if (enumConstants != null && enumConstants.length > 0) {
+                            String desc = Arrays.stream(enumConstants).map(e -> e.getValue() + "-" + e.getDesc()).collect(joining(";"));
+                            context.getSpecificationBuilder().xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName())))
+                                    .namespace("_____" + desc + "_____"));
+                        }
+                    }
+                }
+
+                // 如果是返回参数
+                ApiExt apiExt = AnnotationUtils.findAnnotation(field, ApiExt.class);
+                if (apiExt != null) {
+                    context.getSpecificationBuilder()
+                            .description(apiExt.value())
+                            .isHidden(apiExt.hidden());
+                }
+                // 如果是请求参数
+                else if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {
                     for (Class<?> apiExtAnno : API_EXT_ANNOS) {
                         @SuppressWarnings("unchecked")
                         Map<String, Object> annotationValueMap = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
                         if (!CollectionUtils.isEmpty(annotationValueMap)) {
                             context.getSpecificationBuilder()
-                                    // 使用xml来代表顺序，最后再将其设置成null
-                                    .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))))
                                     .description((String) annotationValueMap.get("name"))
                                     .required((Boolean) annotationValueMap.get("required"))
                                     .isHidden((Boolean) annotationValueMap.get("hidden"));

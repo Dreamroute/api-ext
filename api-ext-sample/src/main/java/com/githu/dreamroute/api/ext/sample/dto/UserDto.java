@@ -1,5 +1,7 @@
 package com.githu.dreamroute.api.ext.sample.dto;
 
+import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
+import com.github.dreamroute.starter.constraints.ApiExt;
 import com.github.dreamroute.starter.constraints.ApiExtArray;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
 import com.github.dreamroute.starter.constraints.ApiExtCollection;
@@ -12,6 +14,8 @@ import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
@@ -77,25 +81,39 @@ public class UserDto {
     @Data
     @ApiModel("新增返回对象")
     public static class InsertResp implements Serializable {
-        @ApiExtLong(name = "主键", min = 1, max = 100)
+        @ApiExt("主键ID")
         private Long id;
-        @ApiExtStr(name = "姓名", min = 2)
+
+        @ApiExt("姓名")
         private String name;
 
+        @ApiExt("地址")
         private String[] addrs;
-        private List<Role> rols;
+
+        @ApiExt("角色")
+        private List<Role> roles;
+
+        @ApiExt("状态")
+        @ApiModelProperty(allowableValues = "1, 2, 3")
+        private Status status;
     }
 
     @Data
+    @ApiModel
     public static class Role {
         @ApiExtStr(name = "角色名", max = 20, min = 2)
         private String name;
     }
 
-    public enum Status {
-        INIT,
-        VALID,
-        DELETE
+    @Getter
+    @RequiredArgsConstructor
+    public enum Status implements EnumMarker {
+        INIT(1, "初始化"),
+        VALID(2, "有效"),
+        DELETE(3, "已删除");
+
+        private final Integer value;
+        private final String desc;
     }
 
     @Data

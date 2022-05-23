@@ -1,6 +1,7 @@
 package com.githu.dreamroute.api.ext.sample.controller;
 
 import com.githu.dreamroute.api.ext.sample.dto.UserDto.InsertReq;
+import com.githu.dreamroute.api.ext.sample.dto.UserDto.InsertResp;
 import io.swagger.annotations.Api;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @PostMapping("/insert")
-    public InsertReq insert(@Validated @RequestBody InsertReq req) {
-        return req;
+    public InsertResp insert(@Validated @RequestBody InsertReq req) {
+        return new InsertResp();
     }
 
 }

@@ -7,14 +7,14 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 描述：{@link String}注解，用于限制字符串
+ * 描述：用于标注DTO返回对象的属性
  *
  * @author w.dehi.2022-05-17
  */
 @ApiExtMarker
 @Target(FIELD)
 @Retention(RUNTIME)
-public @interface ApiExt {
+public @interface ApiExtResp {
 
     /**
      * 属性名称

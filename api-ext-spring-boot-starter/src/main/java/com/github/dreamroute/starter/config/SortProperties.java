@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static cn.hutool.core.util.NumberUtil.isNumber;
+import static com.github.dreamroute.starter.plugin.FillBasePropertiesPlugin.SPECIAL;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -60,8 +61,8 @@ public class SortProperties {
                     Schema<?> v = e.getValue();
 
                     String namespace = ofNullable(v.getXml()).map(XML::getNamespace).orElse("");
-                    if (!StringUtils.isEmpty(namespace) && namespace.startsWith("_____") && namespace.endsWith("_____")) {
-                        String[] enums = namespace.substring(5, namespace.length() - 5).split(";");
+                    if (!StringUtils.isEmpty(namespace) && namespace.startsWith(SPECIAL) && namespace.endsWith(SPECIAL)) {
+                        String[] enums = namespace.substring(5, namespace.length() - 5).split(",");
                         List<String> collect = Arrays.stream(enums).collect(toList());
                         e.getValue().setEnum(collect);
                     }

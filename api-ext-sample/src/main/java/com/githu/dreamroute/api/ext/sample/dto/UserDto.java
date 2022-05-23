@@ -1,7 +1,6 @@
 package com.githu.dreamroute.api.ext.sample.dto;
 
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
-import com.github.dreamroute.starter.constraints.ApiExt;
 import com.github.dreamroute.starter.constraints.ApiExtArray;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
 import com.github.dreamroute.starter.constraints.ApiExtCollection;
@@ -10,6 +9,7 @@ import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
 import com.github.dreamroute.starter.constraints.ApiExtInteger;
 import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtObject;
+import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,7 +38,6 @@ public class UserDto {
     @ApiModel("新增对象")
     public static class InsertReq {
 
-        @ApiModelProperty(allowableValues = "5, 5, 5")
         @ApiExtStr(name = "姓名", min = 2, max = 10, required = false)
         private String name;
 
@@ -81,20 +80,19 @@ public class UserDto {
     @Data
     @ApiModel("新增返回对象")
     public static class InsertResp implements Serializable {
-        @ApiExt("主键ID")
+        @ApiExtResp("主键ID")
         private Long id;
 
-        @ApiExt("姓名")
+        @ApiExtResp("姓名")
         private String name;
 
-        @ApiExt("地址")
+        @ApiExtResp("地址")
         private String[] addrs;
 
-        @ApiExt("角色")
+        @ApiExtResp("角色")
         private List<Role> roles;
 
-        @ApiExt("状态")
-        @ApiModelProperty(allowableValues = "1, 2, 3")
+        @ApiExtResp("状态")
         private Status status;
     }
 

@@ -5,7 +5,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
-import com.github.dreamroute.starter.constraints.ApiExt;
+import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -20,7 +20,6 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +36,8 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.plugin
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1) // 需要在ApiModelPropertyPropertyBuilder之后被调用，用于覆盖默认属性
 public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
+
+    public static final String SPECIAL = "_____";
 
     private static final Map<Class<?>, Map<String, Integer>> ORDER_CACHE = new ConcurrentHashMap<>();
     public static final Set<Class<?>> API_EXT_ANNOS;
@@ -77,19 +78,19 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                         Class<EnumMarker> c = (Class<EnumMarker>) field.getType();
                         EnumMarker[] enumConstants = c.getEnumConstants();
                         if (enumConstants != null && enumConstants.length > 0) {
-                            String desc = Arrays.stream(enumConstants).map(e -> e.getValue() + "-" + e.getDesc()).collect(joining(";"));
+                            String desc = Arrays.stream(enumConstants).map(e -> e.getValue() + "-" + e.getDesc()).collect(joining(","));
                             context.getSpecificationBuilder().xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName())))
-                                    .namespace("_____" + desc + "_____"));
+                                    .namespace(SPECIAL + desc + SPECIAL));
                         }
                     }
                 }
 
                 // 如果是返回参数
-                ApiExt apiExt = AnnotationUtils.findAnnotation(field, ApiExt.class);
-                if (apiExt != null) {
+                ApiExtResp apiExtResp = AnnotationUtils.findAnnotation(field, ApiExtResp.class);
+                if (apiExtResp != null) {
                     context.getSpecificationBuilder()
-                            .description(apiExt.value())
-                            .isHidden(apiExt.hidden());
+                            .description(apiExtResp.value())
+                            .isHidden(apiExtResp.hidden());
                 }
                 // 如果是请求参数
                 else if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static com.github.dreamroute.starter.constraints.ApiExtMarker.BASE_MSG;
-import static com.github.dreamroute.starter.plugin.FillBaseProperties.API_EXT_ANNOS;
+import static com.github.dreamroute.starter.plugin.FillBasePropertiesPlugin.API_EXT_ANNOS;
 
 /**
  * @author w.dehi.2022-05-17

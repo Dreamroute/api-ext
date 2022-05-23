@@ -2,6 +2,7 @@ package com.github.dreamroute.starter.plugin;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import io.swagger.annotations.ApiModel;
@@ -9,6 +10,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
@@ -18,6 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 
@@ -28,11 +31,25 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.plugin
  */
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1) // 需要在ApiModelPropertyPropertyBuilder之后被调用，用于覆盖默认属性
-public class FillBaseProperties implements ModelPropertyBuilderPlugin {
+public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
 
+    private static final Map<Class<?>, Map<String, Integer>> ORDER_CACHE = new ConcurrentHashMap<>();
     public static final Set<Class<?>> API_EXT_ANNOS;
     static {
         API_EXT_ANNOS = ClassUtil.scanPackageByAnnotation(ApiExtMarker.class.getPackage().getName(), ApiExtMarker.class);
+    }
+
+    private int getPosition(Class<?> dtoCls, String name) {
+        Map<String, Integer> map = ORDER_CACHE.get(dtoCls);
+        if (map == null || map.isEmpty()) {
+            map = new ConcurrentHashMap<>();
+            ORDER_CACHE.put(dtoCls, map);
+            Field[] fields = ReflectUtil.getFields(dtoCls);
+            for (int i = 0; i < fields.length; i++) {
+                map.put(fields[i].getName(), i);
+            }
+        }
+        return map.get(name);
     }
 
     @Override
@@ -53,6 +70,7 @@ public class FillBaseProperties implements ModelPropertyBuilderPlugin {
                         Map<String, Object> annotationValueMap = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
                         if (!CollectionUtils.isEmpty(annotationValueMap)) {
                             context.getSpecificationBuilder()
+                                    .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))))
                                     .description((String) annotationValueMap.get("name"))
                                     .required((Boolean) annotationValueMap.get("required"))
                                     .isHidden((Boolean) annotationValueMap.get("hidden"));

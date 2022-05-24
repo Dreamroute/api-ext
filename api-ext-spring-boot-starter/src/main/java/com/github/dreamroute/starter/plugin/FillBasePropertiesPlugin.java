@@ -5,13 +5,15 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
-import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
+import com.github.dreamroute.starter.constraints.ApiExtResp;
 import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -75,12 +77,17 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                     context.getSpecificationBuilder()
                             .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))));
                     if (EnumMarker.class.isAssignableFrom(field.getType())) {
+                        @SuppressWarnings("unchecked")
                         Class<EnumMarker> c = (Class<EnumMarker>) field.getType();
                         EnumMarker[] enumConstants = c.getEnumConstants();
                         if (enumConstants != null && enumConstants.length > 0) {
                             String desc = Arrays.stream(enumConstants).map(e -> e.getValue() + "-" + e.getDesc()).collect(joining(","));
-                            context.getSpecificationBuilder().xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName())))
-                                    .namespace(SPECIAL + desc + SPECIAL));
+                            context.getSpecificationBuilder()
+                                    .xml(new Xml()
+                                            .name(String.valueOf(getPosition(dtoCls, field.getName())))
+                                            .namespace(SPECIAL + desc + SPECIAL))
+                                    // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
+                                    .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
                         }
                     }
                 }

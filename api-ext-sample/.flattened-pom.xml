@@ -3,25 +3,26 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.dreamroute</groupId>
-  <artifactId>api-ext-spring-boot-starter</artifactId>
+  <artifactId>api-ext-sample</artifactId>
   <version>1.0.0-RELEASE</version>
-  <name>api-ext-spring-boot-starter</name>
-  <description>swagger and java/hibernate validator combine</description>
-  <url>https://github.com/Dreamroute/api-ext</url>
+  <description>Parent pom providing dependency and plugin management for applications built with Maven</description>
+  <url>https://spring.io/projects/spring-boot/api-ext/api-ext-sample</url>
   <licenses>
     <license>
-      <name>MIT</name>
-      <url>https://opensource.org/licenses/mit-license.php</url>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
   <developers>
     <developer>
-      <name>w.dehai</name>
-      <email>342252328@qq.com</email>
+      <name>Pivotal</name>
+      <email>info@pivotal.io</email>
+      <organization>Pivotal Software, Inc.</organization>
+      <organizationUrl>https://www.spring.io</organizationUrl>
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/Dreamroute/api-ext</url>
+    <url>https://github.com/spring-projects/spring-boot/api-ext/api-ext-sample</url>
   </scm>
   <distributionManagement>
     <repository>
@@ -30,6 +31,12 @@
     </repository>
   </distributionManagement>
   <dependencies>
+    <dependency>
+      <groupId>com.github.dreamroute</groupId>
+      <artifactId>api-ext-spring-boot-starter</artifactId>
+      <version>1.0.0-RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>

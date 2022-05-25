@@ -127,8 +127,8 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-3rd</id>
-            <url>http://10.82.12.29:8081/repository/maven-3rd/</url>
+            <id>jc</id>
+            <url>http://nexus.yzw.cn/repository/jc/</url>
         </repository>
     </distributionManagement>
 

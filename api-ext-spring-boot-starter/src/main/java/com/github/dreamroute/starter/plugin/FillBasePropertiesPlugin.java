@@ -3,11 +3,13 @@ package com.github.dreamroute.starter.plugin;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
+import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
 import io.swagger.annotations.ApiModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -62,9 +64,9 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
 
     @Override
     public void apply(ModelPropertyContext context) {
-        Class<?> dtoCls = context.getOwner().getType().getErasedType();
 
         // 查找被@ApiModel标记的DTO类，如果不这样ModelAndView也会被查到
+        Class<?> dtoCls = context.getResolver().resolve(context.getOwner().getType()).getErasedType();
         ApiModel apiModel = AnnotationUtils.findAnnotation(dtoCls, ApiModel.class);
 
         if (apiModel != null) {

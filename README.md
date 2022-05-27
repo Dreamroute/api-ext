@@ -1,5 +1,14 @@
 # Swagger注解、Java/Hibernate校验注解合并
 
+### get start.
+```xml
+  <dependency>
+      <groupId>com.github.dreamroute</groupId>
+      <artifactId>api-ext-spring-boot-starter</artifactId>
+      <version>${latest.version}</version>
+  </dependency>
+```
+
 > 强烈建议DTO的基础类型都使用包装类型，因为包装类型的默认值是`null`
 
 ### 0. 动机

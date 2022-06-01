@@ -4,12 +4,12 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
-import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
 import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
+import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import springfox.documentation.builders.ModelSpecificationBuilder;
@@ -20,14 +20,13 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.stream.Collectors.joining;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 
 /**
@@ -43,9 +42,13 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
 
     private static final Map<Class<?>, Map<String, Integer>> ORDER_CACHE = new ConcurrentHashMap<>();
     public static final Set<Class<?>> API_EXT_ANNOS;
+
     static {
         API_EXT_ANNOS = ClassUtil.scanPackageByAnnotation(ApiExtMarker.class.getPackage().getName(), ApiExtMarker.class);
     }
+
+    @Resource
+    private PluginRegistry<EnumPlugin, Class<?>> registry;
 
     private int getPosition(Class<?> dtoCls, String name) {
         Map<String, Integer> map = ORDER_CACHE.get(dtoCls);
@@ -76,20 +79,20 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                     // 使用xml来代表顺序，最后再将其设置成null
                     context.getSpecificationBuilder()
                             .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))));
-                    if (EnumMarker.class.isAssignableFrom(field.getType())) {
-                        @SuppressWarnings("unchecked")
-                        Class<EnumMarker> c = (Class<EnumMarker>) field.getType();
-                        EnumMarker[] enumConstants = c.getEnumConstants();
-                        if (enumConstants != null && enumConstants.length > 0) {
-                            String desc = Arrays.stream(enumConstants).map(e -> e.getValue() + "-" + e.getDesc()).collect(joining(","));
+
+                    // 处理插件类型
+                    registry.getPluginFor(field.getType()).ifPresent(c -> {
+                        String[] desc = c.desc(field.getType());
+                        if (desc.length > 0) {
+                            String description = String.join(",", desc);
                             context.getSpecificationBuilder()
                                     .xml(new Xml()
                                             .name(String.valueOf(getPosition(dtoCls, field.getName())))
-                                            .namespace(SPECIAL + desc + SPECIAL))
+                                            .namespace(SPECIAL + description + SPECIAL))
                                     // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
                                     .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
                         }
-                    }
+                    });
                 }
 
                 // 如果是返回参数

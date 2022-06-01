@@ -16,6 +16,7 @@
 
 package com.github.dreamroute.starter.config;
 
+import com.github.dreamroute.starter.plugin.EnumPlugin;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Role;
+import org.springframework.plugin.core.config.EnablePluginRegistries;
 
 import javax.validation.Validator;
 import javax.validation.executable.ExecutableValidator;
@@ -41,6 +43,7 @@ import javax.validation.executable.ExecutableValidator;
 @ConditionalOnResource(resources = "classpath:META-INF/services/javax.validation.spi.ValidationProvider")
 @Import(ApiExtPrimaryDefaultValidatorPostProcessor.class)
 @AutoConfigureBefore(ValidationAutoConfiguration.class)
+@EnablePluginRegistries(value = {EnumPlugin.class})
 public class ApiExtValidationAutoConfiguration {
 
 	@Bean

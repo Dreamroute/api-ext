@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class SortProperties {
 
+    @SuppressWarnings("rawtypes")
     @Around("execution(public * springfox.documentation.oas.web.WebMvcBasePathAndHostnameTransformationFilter.transform(..))")
     public Object process(ProceedingJoinPoint point) throws Throwable {
         Object[] args = point.getArgs();
@@ -44,7 +44,7 @@ public class SortProperties {
             for (Schema<?> value : values) {
                 Map<String, Schema> properties = value.getProperties();
                 List<Entry<String, Schema>> list = newArrayList(properties.entrySet());
-                Collections.sort(list, (o1, o2) -> {
+                list.sort((o1, o2) -> {
                     Object e1 = ofNullable(o1).map(Entry::getValue).map(Schema::getXml).map(XML::getName).orElse(null);
                     Object e2 = ofNullable(o2).map(Entry::getValue).map(Schema::getXml).map(XML::getName).orElse(null);
 
@@ -64,7 +64,7 @@ public class SortProperties {
                     if (!StringUtils.isEmpty(namespace) && namespace.startsWith(SPECIAL) && namespace.endsWith(SPECIAL)) {
                         String[] enums = namespace.substring(5, namespace.length() - 5).split(",");
                         List<String> collect = Arrays.stream(enums).collect(toList());
-                        e.getValue().setEnum(collect);
+                        v.setEnum((List) collect);
                     }
                     v.setXml(null);
                     sorted.put(e.getKey(), v);

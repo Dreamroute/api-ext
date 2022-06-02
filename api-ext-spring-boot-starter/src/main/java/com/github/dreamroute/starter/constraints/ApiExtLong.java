@@ -49,12 +49,12 @@ public @interface ApiExtLong {
     /**
      * 最小值
      */
-    long min();
+    long min() default Long.MIN_VALUE;
 
     /**
      * 最大值
      */
-    long max();
+    long max() default Long.MAX_VALUE;
 
     Class<?>[] groups() default {};
 

@@ -49,12 +49,12 @@ public @interface ApiExtInteger {
     /**
      * 最小值
      */
-    int min();
+    int min() default Integer.MIN_VALUE;
 
     /**
      * 最大值
      */
-    int max();
+    int max() default Integer.MAX_VALUE;
 
     Class<?>[] groups() default {};
 

@@ -1,4 +1,4 @@
-# Swagger注解、Java/Hibernate校验注解合并
+# Swagger注解、Java/Hibernate校验注解增强框架
 
 ### get start.
 ```xml

@@ -47,12 +47,12 @@ public @interface ApiExtLong {
     String message() default BASE_MSG + "大小范围在[${min}至${max}]之间";
 
     /**
-     * 最小长度
+     * 最小值
      */
     long min();
 
     /**
-     * 最大长度
+     * 最大值
      */
     long max();
 

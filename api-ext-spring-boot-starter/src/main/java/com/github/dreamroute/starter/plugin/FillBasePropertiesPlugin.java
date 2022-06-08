@@ -6,6 +6,7 @@ import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
+import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
@@ -106,18 +107,30 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                 else if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {
                     for (Class<?> apiExtAnno : API_EXT_ANNOS) {
                         @SuppressWarnings("unchecked")
-                        Map<String, Object> annotationValueMap = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
-                        if (!CollectionUtils.isEmpty(annotationValueMap)) {
+                        Map<String, Object> attr = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
+                        if (!CollectionUtils.isEmpty(attr)) {
+
+                            // 获取校验信息
+                            String validation = createValidation(apiExtAnno);
+
+                            // 将基本出行织入到swagger中
                             context.getSpecificationBuilder()
-                                    .description((String) annotationValueMap.get("name"))
-                                    .required((Boolean) annotationValueMap.get("required"))
-                                    .isHidden((Boolean) annotationValueMap.get("hidden"));
+                                    .description((String) attr.get("name"))
+                                    .required((Boolean) attr.get("required"))
+                                    .isHidden((Boolean) attr.get("hidden"));
                             break;
                         }
                     }
                 }
             });
         }
+    }
+
+    private String createValidation(Class<?> anno) {
+        if (anno == ApiExtStr.class) {
+
+        }
+        return null;
     }
 
     @Override

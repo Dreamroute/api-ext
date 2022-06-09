@@ -28,8 +28,7 @@ public class ApiExtArrayValidator implements ConstraintValidator<ApiExtArray, Ob
         if (required) {
             return value != null && value.length >= min && value.length <= max;
         } else {
-            // required = false时， min无效
-            return value == null || value.length == 0 || value.length <= max;
+            return value == null || value.length == 0 || (value.length >= min && value.length <= max);
         }
     }
 }

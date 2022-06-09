@@ -4,7 +4,15 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
+import com.github.dreamroute.starter.constraints.ApiExtArray;
+import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
+import com.github.dreamroute.starter.constraints.ApiExtCollection;
+import com.github.dreamroute.starter.constraints.ApiExtDate;
+import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
+import com.github.dreamroute.starter.constraints.ApiExtInteger;
+import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
+import com.github.dreamroute.starter.constraints.ApiExtObject;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
@@ -26,6 +34,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
@@ -111,11 +120,11 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                         if (!CollectionUtils.isEmpty(attr)) {
 
                             // 获取校验信息
-                            String validation = createValidation(apiExtAnno);
+                            String validation = createValidation(apiExtAnno, attr);
 
                             // 将基本出行织入到swagger中
                             context.getSpecificationBuilder()
-                                    .description((String) attr.get("name"))
+                                    .description(((String) attr.get("name")) + validation)
                                     .required((Boolean) attr.get("required"))
                                     .isHidden((Boolean) attr.get("hidden"));
                             break;
@@ -126,11 +135,31 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
         }
     }
 
-    private String createValidation(Class<?> anno) {
-        if (anno == ApiExtStr.class) {
+    private String createValidation(Class<?> anno, Map<String, Object> attr) {
+        StringJoiner joiner = new StringJoiner(", ", " -> [", "]");
+        if (anno == ApiExtStr.class
+                || anno == ApiExtInteger.class
+                || anno == ApiExtLong.class
+                || anno == ApiExtBigDecimal.class
+                || anno == ApiExtCollection.class
+                || anno == ApiExtArray.class) {
 
+            joiner.add(attr.get("min").toString())
+                    .add(attr.get("max").toString());
+        } else if (anno == ApiExtDate.class) {
+            Phase p = (Phase) attr.get("phase");
+            switch (p) {
+                case All: joiner.add("无限制"); break;
+                case Past: joiner.add("[过去]"); break;
+                case PastOrPresent: joiner.add("过去或者现在"); break;
+                case Future: joiner.add("将来"); break;
+                case FutureOrPresent: joiner.add("将来或者现在"); break;
+                default: throw new IllegalArgumentException("时间有误");
+            }
+        } else {
+            return "";
         }
-        return null;
+        return joiner.toString();
     }
 
     @Override

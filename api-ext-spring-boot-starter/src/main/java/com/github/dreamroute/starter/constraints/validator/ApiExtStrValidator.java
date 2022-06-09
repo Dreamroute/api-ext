@@ -30,8 +30,7 @@ public class ApiExtStrValidator implements ConstraintValidator<ApiExtStr, String
         if (required) {
             return !isEmpty(value) && value.length() >= min && value.length() <= max;
         } else {
-            // required = false时， min无效
-            return isEmpty(value) || value.length() <= max;
+            return isEmpty(value) || (value.length() >= min && value.length() <= max);
         }
     }
 }

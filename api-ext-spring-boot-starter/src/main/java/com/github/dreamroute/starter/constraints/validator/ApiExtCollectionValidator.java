@@ -29,8 +29,7 @@ public class ApiExtCollectionValidator implements ConstraintValidator<ApiExtColl
         if (required) {
             return value != null && value.size() >= min && value.size() <= max;
         } else {
-            // required = false时， min无效
-            return value == null || value.isEmpty() || value.size() <= max;
+            return value == null || value.isEmpty() || (value.size() >= min && value.size() <= max);
         }
     }
 }

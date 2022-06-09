@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.dreamroute</groupId>
   <artifactId>api-ext-spring-boot-starter</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>api-ext-spring-boot-starter</name>
   <description>swagger and java/hibernate validator combine</description>
   <url>https://github.com/Dreamroute/api-ext</url>

@@ -12,17 +12,13 @@ import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
 import com.github.dreamroute.starter.constraints.ApiExtInteger;
 import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
-import com.github.dreamroute.starter.constraints.ApiExtObject;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
-import io.swagger.annotations.ApiModel;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -32,6 +28,8 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -81,6 +79,9 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
 
         context.getBeanPropertyDefinition().ifPresent(x -> {
             AnnotatedField af = x.getField();
+            if (af == null) {
+                return;
+            }
             Field field = af.getAnnotated();
             ApiExtMarker an = AnnotationUtils.findAnnotation(field, ApiExtMarker.class);
             if (an != null) {
@@ -89,8 +90,15 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                         .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))));
 
                 // 处理插件类型
-                registry.getPluginFor(field.getType()).ifPresent(c -> {
-                    String[] desc = c.desc(field.getType());
+                Class<?> type;
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    ParameterizedType pts = (ParameterizedType) field.getGenericType();
+                    type = (Class<?>) pts.getActualTypeArguments()[0];
+                } else {
+                    type = field.getType();
+                }
+                registry.getPluginFor(type).ifPresent(c -> {
+                    String[] desc = c.desc(type);
                     if (desc.length > 0) {
                         String description = String.join(",", desc);
                         context.getSpecificationBuilder()
@@ -98,7 +106,7 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                                         .name(String.valueOf(getPosition(dtoCls, field.getName())))
                                         .namespace(SPECIAL + description + SPECIAL))
                                 // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
-                                .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
+                                /*.type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build())*/;
                     }
                 });
             }
@@ -120,9 +128,9 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                         // 获取校验信息
                         String validation = createValidation(apiExtAnno, attr);
 
-                        // 将基本出行织入到swagger中
+                        // 将基本属性织入到swagger中
                         context.getSpecificationBuilder()
-                                .description(((String) attr.get("name")) + validation)
+                                .description(attr.get("name") + validation)
                                 .required((Boolean) attr.get("required"))
                                 .isHidden((Boolean) attr.get("hidden"));
                         break;
@@ -133,7 +141,7 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
     }
 
     private String createValidation(Class<?> anno, Map<String, Object> attr) {
-        StringJoiner joiner = new StringJoiner(", ", " -> [", "]");
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
         if (anno == ApiExtStr.class
                 || anno == ApiExtInteger.class
                 || anno == ApiExtLong.class

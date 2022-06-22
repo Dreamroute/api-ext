@@ -1,6 +1,7 @@
 package com.github.dreamroute.starter.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.XML;
 import lombok.extern.slf4j.Slf4j;
@@ -62,9 +63,14 @@ public class SortProperties {
 
                     String namespace = ofNullable(v.getXml()).map(XML::getNamespace).orElse("");
                     if (!StringUtils.isEmpty(namespace) && namespace.startsWith(SPECIAL) && namespace.endsWith(SPECIAL)) {
-                        String[] enums = namespace.substring(5, namespace.length() - 5).split(",");
+                        String[] enums = namespace.substring(SPECIAL.length(), namespace.length() - SPECIAL.length()).split(",");
                         List<String> collect = Arrays.stream(enums).collect(toList());
-                        v.setEnum((List) collect);
+
+                        if (v instanceof ArraySchema) {
+                            ((ArraySchema) e.getValue()).getItems().setEnum((List) collect);
+                        } else {
+                            v.setEnum((List) collect);
+                        }
                     }
                     v.setXml(null);
                     sorted.put(e.getKey(), v);

@@ -23,6 +23,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -75,6 +76,9 @@ public class UserDto {
 
         @ApiExtCollection(name = "手机号码", min = 2, max = 5)
         private Set<String> phones;
+
+        @ApiExtCollection(name = "状态列表")
+        private Collection<Status> statuses;
     }
 
     @Data

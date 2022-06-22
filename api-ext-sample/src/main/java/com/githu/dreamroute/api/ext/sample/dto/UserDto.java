@@ -97,7 +97,6 @@ public class UserDto {
     }
 
     @Data
-    @ApiModel
     public static class Role {
         @ApiExtStr(name = "角色名", max = 20, min = 2)
         private String name;

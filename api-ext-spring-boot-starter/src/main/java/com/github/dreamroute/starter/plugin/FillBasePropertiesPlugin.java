@@ -78,61 +78,58 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
 
         // 查找被@ApiModel标记的DTO类，如果不这样ModelAndView也会被查到
         Class<?> dtoCls = context.getResolver().resolve(context.getOwner().getType()).getErasedType();
-        ApiModel apiModel = AnnotationUtils.findAnnotation(dtoCls, ApiModel.class);
 
-        if (apiModel != null) {
-            context.getBeanPropertyDefinition().ifPresent(x -> {
-                AnnotatedField af = x.getField();
-                Field field = af.getAnnotated();
-                ApiExtMarker an = AnnotationUtils.findAnnotation(field, ApiExtMarker.class);
-                if (an != null) {
-                    // 使用xml来代表顺序，最后再将其设置成null
-                    context.getSpecificationBuilder()
-                            .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))));
+        context.getBeanPropertyDefinition().ifPresent(x -> {
+            AnnotatedField af = x.getField();
+            Field field = af.getAnnotated();
+            ApiExtMarker an = AnnotationUtils.findAnnotation(field, ApiExtMarker.class);
+            if (an != null) {
+                // 使用xml来代表顺序，最后再将其设置成null
+                context.getSpecificationBuilder()
+                        .xml(new Xml().name(String.valueOf(getPosition(dtoCls, field.getName()))));
 
-                    // 处理插件类型
-                    registry.getPluginFor(field.getType()).ifPresent(c -> {
-                        String[] desc = c.desc(field.getType());
-                        if (desc.length > 0) {
-                            String description = String.join(",", desc);
-                            context.getSpecificationBuilder()
-                                    .xml(new Xml()
-                                            .name(String.valueOf(getPosition(dtoCls, field.getName())))
-                                            .namespace(SPECIAL + description + SPECIAL))
-                                    // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
-                                    .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
-                        }
-                    });
-                }
+                // 处理插件类型
+                registry.getPluginFor(field.getType()).ifPresent(c -> {
+                    String[] desc = c.desc(field.getType());
+                    if (desc.length > 0) {
+                        String description = String.join(",", desc);
+                        context.getSpecificationBuilder()
+                                .xml(new Xml()
+                                        .name(String.valueOf(getPosition(dtoCls, field.getName())))
+                                        .namespace(SPECIAL + description + SPECIAL))
+                                // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
+                                .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
+                    }
+                });
+            }
 
-                // 如果是返回参数
-                ApiExtResp apiExtResp = AnnotationUtils.findAnnotation(field, ApiExtResp.class);
-                if (apiExtResp != null) {
-                    context.getSpecificationBuilder()
-                            .description(apiExtResp.value())
-                            .isHidden(apiExtResp.hidden());
-                }
-                // 如果是请求参数
-                else if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {
-                    for (Class<?> apiExtAnno : API_EXT_ANNOS) {
-                        @SuppressWarnings("unchecked")
-                        Map<String, Object> attr = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
-                        if (!CollectionUtils.isEmpty(attr)) {
+            // 如果是返回参数
+            ApiExtResp apiExtResp = AnnotationUtils.findAnnotation(field, ApiExtResp.class);
+            if (apiExtResp != null) {
+                context.getSpecificationBuilder()
+                        .description(apiExtResp.value())
+                        .isHidden(apiExtResp.hidden());
+            }
+            // 如果是请求参数
+            else if (an != null && !CollectionUtils.isEmpty(API_EXT_ANNOS)) {
+                for (Class<?> apiExtAnno : API_EXT_ANNOS) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> attr = AnnotationUtil.getAnnotationValueMap(field, (Class<Annotation>) apiExtAnno);
+                    if (!CollectionUtils.isEmpty(attr)) {
 
-                            // 获取校验信息
-                            String validation = createValidation(apiExtAnno, attr);
+                        // 获取校验信息
+                        String validation = createValidation(apiExtAnno, attr);
 
-                            // 将基本出行织入到swagger中
-                            context.getSpecificationBuilder()
-                                    .description(((String) attr.get("name")) + validation)
-                                    .required((Boolean) attr.get("required"))
-                                    .isHidden((Boolean) attr.get("hidden"));
-                            break;
-                        }
+                        // 将基本出行织入到swagger中
+                        context.getSpecificationBuilder()
+                                .description(((String) attr.get("name")) + validation)
+                                .required((Boolean) attr.get("required"))
+                                .isHidden((Boolean) attr.get("hidden"));
+                        break;
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     private String createValidation(Class<?> anno, Map<String, Object> attr) {

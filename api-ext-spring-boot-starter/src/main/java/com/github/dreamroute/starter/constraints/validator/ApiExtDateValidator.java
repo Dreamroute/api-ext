@@ -67,7 +67,7 @@ public class ApiExtDateValidator implements ConstraintValidator<ApiExtDate, Date
                 return futureOrPresent;
             }
             default:
-                return false;
+                return true;
         }
     }
 }

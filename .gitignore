@@ -30,3 +30,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.flattened-pom.xml
+./api-ext-spring-boot-starter/.flattened-pom.xml
+./api-ext-sample/.flattened-pom.xml

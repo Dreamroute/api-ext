@@ -1,5 +1,7 @@
 package com.githu.dreamroute.api.ext.sample.controller;
 
+import com.githu.dreamroute.api.ext.sample.dto.UserDto.CheckExtendsReq;
+import com.githu.dreamroute.api.ext.sample.dto.UserDto.CheckExtendsResp;
 import com.githu.dreamroute.api.ext.sample.dto.UserDto.InsertReq;
 import com.githu.dreamroute.api.ext.sample.dto.UserDto.InsertResp;
 import io.swagger.annotations.Api;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 描述：用户 Controller
@@ -22,6 +26,14 @@ public class UserController {
     @PostMapping("/insert")
     public InsertResp insert(@Validated @RequestBody InsertReq req) {
         return new InsertResp();
+    }
+
+    /**
+     * 检查下swagger文档请求和返回值带有继承的实体是如何显示的
+     */
+    @PostMapping("/checkExtends")
+    public List<CheckExtendsResp> checkExtends(@Validated @RequestBody CheckExtendsReq req) {
+        return null;
     }
 
 }

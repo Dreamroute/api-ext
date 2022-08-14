@@ -14,6 +14,7 @@ import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -136,6 +137,30 @@ public class UserDto {
         @ApiExtBigDecimal(name = "单价", max = "9999999999.9999", min = "0")
         private BigDecimal price;
 
+    }
+
+    @Data
+    public static class Pk implements Serializable {
+        @ApiExtLong(name = "主键ID")
+        private Long id;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    public static class CheckExtendsReq extends Pk implements Serializable {
+        @ApiExtStr(name = "姓名", max = 10, required = false)
+        private String name;
+        @ApiExtStr(name = "密码", max = 16)
+        private String password;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    public static class CheckExtendsResp extends Pk implements Serializable {
+        @ApiExtResp("姓名")
+        private String name;
+        @ApiExtResp("密码")
+        private String password;
     }
 
 

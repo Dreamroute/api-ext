@@ -19,6 +19,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -149,8 +150,33 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                 || anno == ApiExtCollection.class
                 || anno == ApiExtArray.class) {
 
-            joiner.add(attr.get("min").toString())
-                    .add(attr.get("max").toString());
+            String minStr = null;
+            String maxStr = null;
+
+            // 如果未手动指定int和long的最小值，那么就是该类型的最小值，页面展示负无穷大
+            Object min = attr.get("min");
+            Object max = attr.get("max");
+            boolean minInteger = min instanceof Integer && ((Integer) min).equals(Integer.MIN_VALUE);
+            boolean minLong = min instanceof Long && ((Long) min).equals(Long.MIN_VALUE);
+            if (minInteger || minLong) {
+                minStr = "-∞";
+            }
+
+            // 如果未手动指定int和long的最大值，那么就是该类型的最大值，页面展示正无穷大
+            boolean maxInteger = max instanceof Integer && ((Integer) max).equals(Integer.MAX_VALUE);
+            boolean maxLong = max instanceof Long && ((Long) max).equals(Long.MAX_VALUE);
+            if (maxInteger || maxLong) {
+                maxStr = "+∞";
+            }
+
+            if (StringUtils.isEmpty(minStr)) {
+                minStr = attr.get("min").toString();
+            }
+            if (StringUtils.isEmpty(maxStr)) {
+                maxStr = attr.get("max").toString();
+            }
+
+            joiner.add(minStr).add(maxStr);
         } else if (anno == ApiExtDate.class) {
             Phase p = (Phase) attr.get("phase");
             switch (p) {

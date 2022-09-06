@@ -20,6 +20,8 @@ import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -75,7 +77,6 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
     @Override
     public void apply(ModelPropertyContext context) {
 
-        // 查找被@ApiModel标记的DTO类，如果不这样ModelAndView也会被查到
         Class<?> dtoCls = context.getResolver().resolve(context.getOwner().getType()).getErasedType();
 
         context.getBeanPropertyDefinition().ifPresent(x -> {
@@ -101,13 +102,13 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                 registry.getPluginFor(type).ifPresent(c -> {
                     String[] desc = c.desc(type);
                     if (desc.length > 0) {
-                        String description = String.join(",", desc);
+                        String description = String.join("; ", desc);
                         context.getSpecificationBuilder()
                                 .xml(new Xml()
                                         .name(String.valueOf(getPosition(dtoCls, field.getName())))
                                         .namespace(SPECIAL + description + SPECIAL))
                                 // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
-                                /*.type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build())*/;
+                                .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
                     }
                 });
             }

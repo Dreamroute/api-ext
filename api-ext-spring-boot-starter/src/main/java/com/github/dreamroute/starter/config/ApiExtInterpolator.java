@@ -27,6 +27,7 @@ public class ApiExtInterpolator implements MessageInterpolator {
     private final MessageInterpolator targetInterpolator;
 
     private static final String NOT_EMPTY = "不允许为空";
+    private static final String REQUIRED = "required";
 
     public ApiExtInterpolator(MessageInterpolator targetInterpolator) {
         Assert.notNull(targetInterpolator, "Target MessageInterpolator must not be null");
@@ -42,12 +43,12 @@ public class ApiExtInterpolator implements MessageInterpolator {
         if (API_EXT_ANNOS.contains(apiExt)) {
             Map<String, Object> attrs = AnnotationUtils.getAnnotationAttributes(apiExtAnnotation);
             Properties properties = new Properties();
-            attrs.forEach((k, v) -> properties.put(k.toString(), v.toString()));
-            boolean required = (boolean) attrs.get("required");
+            attrs.forEach((k, v) -> properties.put(k, v.toString()));
+            boolean required = (boolean) attrs.get(REQUIRED);
             if (required) {
-                properties.put("required", NOT_EMPTY + ",");
+                properties.put(REQUIRED, NOT_EMPTY + ",");
             } else {
-                properties.put("required","");
+                properties.put(REQUIRED,"");
             }
             PropertyPlaceholderHelper helper = new PropertyPlaceholderHelper("${", "}");
             String result = helper.replacePlaceholders(message, properties);

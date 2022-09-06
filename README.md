@@ -11,6 +11,23 @@
 
 > 强烈建议DTO的基础类型都使用包装类型，因为包装类型的默认值是`null`
 
+### 起步配置：注意（十分重要）
+如果你手动配置了Swagger的`Docket`，那么`DocumentationType`的值一定要配置成`OAS_30`，比如
+```
+ @Bean
+ public Docket createRestApi() {
+     // 这里一定需要设置成OAS_30，而不能是SWAGGER_2或者SWAGGER_12
+     return new Docket(DocumentationType.OAS_30)
+             .apiInfo(apiInfo())
+             .select()
+             .apis(RequestHandlerSelectors.basePackage("com.xxx.xxx.controller"))
+             .paths(PathSelectors.regex("(?!/error.*).*"))
+             .build();
+ }
+```
+> 对上述说明：SortProperties拦截的是`springfox.documentation.oas.web.WebMvcBasePathAndHostnameTransformationFilter`下的transform方法，而如果上面配置不是OAS_30，swagger返回值过滤器走的是
+> springfox.documentation.swagger2.web.WebMvcBasePathAndHostnameTransformationFilter这个过滤器，内部的数据结构完全不一样，会报错
+
 ### 0. 动机
 1. 我们使用Swagger作为API工具、使用java/Hibernate validator作为请求参数校验时，实体类似这样：
 ```java

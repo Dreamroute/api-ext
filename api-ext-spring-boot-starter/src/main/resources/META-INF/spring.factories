@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.dreamroute.starter.config.ApiExtValidationAutoConfiguration
+  com.github.dreamroute.starter.config.ApiExtValidationAutoConfiguration, \
+  com.github.dreamroute.starter.config.SortProperties

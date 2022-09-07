@@ -28,6 +28,10 @@
 > 对上述说明：SortProperties拦截的是`springfox.documentation.oas.web.WebMvcBasePathAndHostnameTransformationFilter`下的transform方法，而如果上面配置不是OAS_30，swagger返回值过滤器走的是
 > springfox.documentation.swagger2.web.WebMvcBasePathAndHostnameTransformationFilter这个过滤器，内部的数据结构完全不一样，会报错
 
+### API地址：
+1. swagger: localhost:8083/swagger-ui/index.html
+2. knife4j: localhost:8083/doc.html
+
 ### 0. 动机
 1. 我们使用Swagger作为API工具、使用java/Hibernate validator作为请求参数校验时，实体类似这样：
 ```java

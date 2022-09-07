@@ -108,6 +108,7 @@ public class ProductReq {
    2. 当枚举有变动的时候，容易忘记更新这一串字符串
 3. 所以对于枚举类型，通过系统自动生成，就能解决上面2个问题
 4. 实现`EnumPlugin`接口，实现`desc`方法，返回一个描述数组即可，可以参考`EnumMarkerPlugin`的实现
+5. 请求参数里面如果是枚举列表，那么接受参数使用Collection而不是List和数组，数组和List不支持
 
 ### 说明
 > 1. 字符串校验：max必填，当required = false时，min不校验，required = true时，min、max都必填

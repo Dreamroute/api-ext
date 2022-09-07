@@ -27,7 +27,7 @@ public class ApiExtInterpolator implements MessageInterpolator {
     private final MessageInterpolator targetInterpolator;
 
     private static final String NOT_EMPTY = "不允许为空";
-    private static final String REQUIRED = "required";
+    public static final String REQUIRED = "required";
 
     public ApiExtInterpolator(MessageInterpolator targetInterpolator) {
         Assert.notNull(targetInterpolator, "Target MessageInterpolator must not be null");

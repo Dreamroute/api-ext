@@ -4,6 +4,7 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
+import com.github.dreamroute.starter.config.ApiExtInterpolator;
 import com.github.dreamroute.starter.constraints.ApiExtArray;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
 import com.github.dreamroute.starter.constraints.ApiExtCollection;
@@ -14,6 +15,7 @@ import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.plugin.core.PluginRegistry;
@@ -38,6 +40,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 
 /**
@@ -177,7 +181,12 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                 maxStr = attr.get("max").toString();
             }
 
-            joiner.add(minStr).add(maxStr);
+            // 如果required为false，那么不拼接取值范围
+            if (((Boolean) attr.get(ApiExtInterpolator.REQUIRED)).equals(TRUE)) {
+                joiner.add(minStr).add(maxStr);
+            } else {
+                return "";
+            }
         } else if (anno == ApiExtDate.class) {
             Phase p = (Phase) attr.get("phase");
             switch (p) {

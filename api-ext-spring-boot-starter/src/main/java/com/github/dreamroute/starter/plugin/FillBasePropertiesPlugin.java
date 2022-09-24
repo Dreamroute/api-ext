@@ -15,7 +15,6 @@ import com.github.dreamroute.starter.constraints.ApiExtLong;
 import com.github.dreamroute.starter.constraints.ApiExtMarker;
 import com.github.dreamroute.starter.constraints.ApiExtResp;
 import com.github.dreamroute.starter.constraints.ApiExtStr;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.plugin.core.PluginRegistry;
@@ -40,7 +39,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 

@@ -17,6 +17,17 @@
             <artifactId>api-ext-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.dreamroute</groupId>
+            <artifactId>mybatis-pro-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

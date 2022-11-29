@@ -14,4 +14,14 @@ public interface EnumPlugin extends Plugin<Class<?>> {
      */
     String[] desc(Class<?> customType);
 
+    /**
+     * 展示给前端的枚举字段需要传递的类型，比如integer, string
+     */
+    String enumType();
+
+    /**
+     * 展示给前端的枚举字段需要传递的类型的格式，比如int32, int64，一般来说只有数字类型需要，其他的返回null即可
+     */
+    String enumFormat();
+
 }

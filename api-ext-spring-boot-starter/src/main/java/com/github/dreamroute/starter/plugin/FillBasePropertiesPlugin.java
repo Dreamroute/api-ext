@@ -4,7 +4,6 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
-import com.github.dreamroute.starter.config.ApiExtInterpolator;
 import com.github.dreamroute.starter.constraints.ApiExtArray;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
 import com.github.dreamroute.starter.constraints.ApiExtCollection;
@@ -21,7 +20,6 @@ import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
@@ -33,13 +31,13 @@ import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.lang.Boolean.TRUE;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
 
 /**
@@ -108,9 +106,7 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                         context.getSpecificationBuilder()
                                 .xml(new Xml()
                                         .name(String.valueOf(getPosition(dtoCls, field.getName())))
-                                        .namespace(SPECIAL + description + SPECIAL))
-                                // 将枚举类型设置成Integer，前端看到的数据类型才是"integer($int32)"，否则就是string类型
-                                .type(new ModelSpecificationBuilder().scalarModel(ScalarType.INTEGER).build());
+                                        .namespace(SPECIAL + description + SPECIAL));
                     }
                 });
             }
@@ -179,12 +175,7 @@ public class FillBasePropertiesPlugin implements ModelPropertyBuilderPlugin {
                 maxStr = attr.get("max").toString();
             }
 
-            // 如果required为false，那么不拼接取值范围
-            if (((Boolean) attr.get(ApiExtInterpolator.REQUIRED)).equals(TRUE)) {
-                joiner.add(minStr).add(maxStr);
-            } else {
-                return "";
-            }
+            joiner.add(minStr).add(maxStr);
         } else if (anno == ApiExtDate.class) {
             Phase p = (Phase) attr.get("phase");
             switch (p) {

@@ -3,6 +3,7 @@ package com.githu.dreamroute.api.ext.sample.dto;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
 import com.github.dreamroute.starter.constraints.ApiExtArray;
 import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
+import com.github.dreamroute.starter.constraints.ApiExtBoolean;
 import com.github.dreamroute.starter.constraints.ApiExtCollection;
 import com.github.dreamroute.starter.constraints.ApiExtDate;
 import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
@@ -60,6 +61,9 @@ public class UserDto {
 
         @ApiExtDate(name = "出生日期", phase = Phase.PastOrPresent)
         private Date birthday;
+
+        @ApiExtBoolean(name = "是否有效", required = false)
+        private Boolean valid;
 
         @Valid
         @ApiExtArray(name = "角色列表")

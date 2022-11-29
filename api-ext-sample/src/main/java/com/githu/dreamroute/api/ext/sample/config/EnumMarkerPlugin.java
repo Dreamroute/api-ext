@@ -27,4 +27,14 @@ public class EnumMarkerPlugin implements EnumPlugin {
     public boolean supports(Class<?> delimiter) {
         return EnumMarker.class.isAssignableFrom(delimiter);
     }
+
+    @Override
+    public String enumType() {
+        return "integer";
+    }
+
+    @Override
+    public String enumFormat() {
+        return "int32";
+    }
 }

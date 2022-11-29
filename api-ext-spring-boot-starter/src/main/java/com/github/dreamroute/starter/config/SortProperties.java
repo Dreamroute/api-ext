@@ -1,5 +1,6 @@
 package com.github.dreamroute.starter.config;
 
+import com.github.dreamroute.starter.plugin.EnumPlugin;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
@@ -10,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -31,6 +33,9 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Aspect
 public class SortProperties {
+
+    @Resource
+    private EnumPlugin enumPlugin;
 
     @SuppressWarnings("rawtypes")
     @Around("execution(public * springfox.documentation.oas.web.WebMvcBasePathAndHostnameTransformationFilter.transform(..))")
@@ -61,12 +66,24 @@ public class SortProperties {
 
                     String namespace = ofNullable(v.getXml()).map(XML::getNamespace).orElse("");
                     if (!StringUtils.isEmpty(namespace) && namespace.startsWith(SPECIAL) && namespace.endsWith(SPECIAL)) {
-                        String[] enums = namespace.substring(SPECIAL.length(), namespace.length() - SPECIAL.length()).split(",");
+                        String[] enums = namespace.substring(SPECIAL.length(), namespace.length() - SPECIAL.length()).split(";");
                         List<String> collect = Arrays.stream(enums).collect(toList());
+
+                        // 如果是枚举类型，那么在字段前面加上【枚举】二字
+                        v.setDescription("【枚举】"+ v.getDescription());
+
+                        String type = enumPlugin.enumType();
+                        String format = enumPlugin.enumFormat();
 
                         if (v instanceof ArraySchema) {
                             ((ArraySchema) e.getValue()).getItems().setEnum((List) collect);
+                            ((ArraySchema) e.getValue()).getItems().setType(type);
+                            ((ArraySchema) e.getValue()).getItems().setFormat(format);
+                            e.getValue().setEnum(collect);
+                            e.getValue().setType("array");
                         } else {
+                            v.setType(type);
+                            v.setFormat(format);
                             v.setEnum((List) collect);
                         }
                     }

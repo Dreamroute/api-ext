@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * 描述：{@link String}校验器
+ * 描述：{@link Object}校验器
  *
  * @author w.dehi.2022-05-17
  */

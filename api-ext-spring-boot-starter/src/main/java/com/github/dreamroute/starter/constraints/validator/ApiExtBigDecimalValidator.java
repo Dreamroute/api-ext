@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 /**
- * 描述：{@link Integer}校验器
+ * 描述：{@link BigDecimal}校验器
  *
  * @author w.dehi.2022-05-17
  */

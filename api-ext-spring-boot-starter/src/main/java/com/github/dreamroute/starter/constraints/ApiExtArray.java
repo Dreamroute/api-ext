@@ -15,7 +15,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 描述：{@link String}注解，用于限制数组
+ * 描述：数组注解，用于限制数组
  *
  * @author w.dehi.2022-05-17
  */

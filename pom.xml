@@ -16,7 +16,14 @@
 
     <properties>
         <!-- 版本信息 -->
-        <revision>1.0.8-RELEASE</revision>
+        <revision>1.0.9-RELEASE</revision>
+
+        <!-- 默认仓库地址 -->
+        <repository.url>https://maven.aliyun.com/repository/public</repository.url>
+        <dist.nexus.release>http://nexus.yzw.cn/repository/maven-releases</dist.nexus.release>
+        <dist.nexus.snapshot>http://nexus.yzw.cn/repository/maven-snapshots</dist.nexus.snapshot>
+        <dist.oss.release>https://oss.sonatype.org/content/repositories/snapshots</dist.oss.release>
+        <dist.oss.snapshot>https://oss.sonatype.org/content/repositories/snapshots</dist.oss.snapshot>
 
         <!-- 编码相关 -->
         <java.version>1.8</java.version>
@@ -38,19 +45,49 @@
 
         <!-- plugin -->
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <flatten-maven-plugin.version>1.2.4</flatten-maven-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
-        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <flatten-maven-plugin.version>1.2.4</flatten-maven-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <lombok-maven-plugin.version>1.18.16.0</lombok-maven-plugin.version>
-        <maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     </properties>
+
+    <!-- 仓库地址 -->
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <url>${repository.url}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus</id>
+            <url>${repository.url}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
 
+            <!-- 基础依赖start -->
             <dependency>
                 <groupId>com.github.dreamroute</groupId>
                 <artifactId>common-util</artifactId>
@@ -92,23 +129,10 @@
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j-spring-boot-starter.version}</version>
             </dependency>
+            <!-- 基础依赖end -->
 
         </dependencies>
     </dependencyManagement>
-
-    <repositories>
-        <repository>
-            <id>nexus</id>
-            <url>https://maven.aliyun.com/repository/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
 
     <build>
         <plugins>
@@ -172,7 +196,7 @@
                 </configuration>
             </plugin>
 
-            <!-- 统一关闭默认部署插件 -->
+            <!-- 默认关闭部署插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>

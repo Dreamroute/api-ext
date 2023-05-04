@@ -9,7 +9,7 @@
   </dependency>
 ```
 
-> 强烈建议DTO的基础类型都使用包装类型，因为包装类型的默认值是`null`
+> 强烈建议DTO的基础类型都使用包装类型，因为包装类型的默认值是`null`，不会出现歧义
 
 ### 起步配置：注意（十分重要）
 如果你手动配置了Swagger的`Docket`，那么`DocumentationType`的值一定要配置成`OAS_30`，比如
@@ -72,7 +72,7 @@ public class ProductReq {
 ---
 
 ### 此框架，需要实现的功能
-1. 支持所有数据类型的校验，其中包括基础类型、数组、集合等
+1. 支持所有数据类型的校验，其中包括基础类型、数组、集合、枚举等
 2. 自动生成校验不通过时的错误信息，无需用户编写，减少重复轮子
 3. 针对不同的数据类型型定义一组校验注解，开发者根据数据类型使用对应的注解
 4. 【必填属性】比如字段中文名字`name`，如果是字符串/数字类型，强制填写最大值，防止用户忘记填写
@@ -109,6 +109,8 @@ public class ProductReq {
 3. 所以对于枚举类型，通过系统自动生成，就能解决上面2个问题
 4. 实现`EnumPlugin`接口，实现`desc`方法，返回一个描述数组即可，可以参考`EnumMarkerPlugin`的实现
 5. 请求参数里面如果是枚举列表，那么接受参数使用Collection而不是List和数组，数组和List不支持
+6. 注意：枚举的校验ApiExt只做非空、个数校验，对于值的校验需要用户自行实现，因为每个应用的枚举格式不太一样，对于传入的值的校验
+规则也不太一样，所以需要用户自行实现，比如demo里面的`HttpMsgConverterConfig`实现的枚举和日期的序列号和反序列化
 
 ### 说明
 > 1. 字符串校验：max必填，当required = false时，min不校验，required = true时，min、max都必填
@@ -144,7 +146,7 @@ public class ProductReq {
         @ApiExtBigDecimal(name = "单价", max = "10.5", min = "0.2", required = false)
         private BigDecimal price;
 
-        @ApiExtObject(name = "状态", required = false)
+        @ApiExtEnum(name = "状态", required = false)
         private Status status;
 
         @ApiExtDate(name = "出生日期", phase = Phase.PastOrPresent)

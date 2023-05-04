@@ -70,7 +70,7 @@ public class SortProperties {
                         List<String> collect = Arrays.stream(enums).collect(toList());
 
                         // 如果是枚举类型，那么在字段前面加上【枚举】二字
-                        v.setDescription("【枚举】"+ v.getDescription());
+                        v.setDescription("[枚举]"+ v.getDescription());
 
                         String type = enumPlugin.enumType();
                         String format = enumPlugin.enumFormat();

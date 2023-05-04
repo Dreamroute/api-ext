@@ -16,7 +16,7 @@
 
     <properties>
         <!-- 版本信息 -->
-        <revision>1.0.9-RELEASE</revision>
+        <revision>1.1.0-RELEASE</revision>
 
         <!-- 默认仓库地址 -->
         <repository.url>https://maven.aliyun.com/repository/public</repository.url>
@@ -39,7 +39,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <hutool-all.version>5.7.13</hutool-all.version>
         <common-util.version>1.2.2</common-util.version>
-        <mybatis-pro.version>1.5.9</mybatis-pro.version>
+        <mybatis-pro.version>1.6.8</mybatis-pro.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <knife4j-spring-boot-starter.version>3.0.3</knife4j-spring-boot-starter.version>
 

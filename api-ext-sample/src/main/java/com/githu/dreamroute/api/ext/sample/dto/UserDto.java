@@ -1,17 +1,8 @@
 package com.githu.dreamroute.api.ext.sample.dto;
 
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
-import com.github.dreamroute.starter.constraints.ApiExtArray;
-import com.github.dreamroute.starter.constraints.ApiExtBigDecimal;
-import com.github.dreamroute.starter.constraints.ApiExtBoolean;
-import com.github.dreamroute.starter.constraints.ApiExtCollection;
-import com.github.dreamroute.starter.constraints.ApiExtDate;
+import com.github.dreamroute.starter.constraints.*;
 import com.github.dreamroute.starter.constraints.ApiExtDate.Phase;
-import com.github.dreamroute.starter.constraints.ApiExtInteger;
-import com.github.dreamroute.starter.constraints.ApiExtLong;
-import com.github.dreamroute.starter.constraints.ApiExtObject;
-import com.github.dreamroute.starter.constraints.ApiExtResp;
-import com.github.dreamroute.starter.constraints.ApiExtStr;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -56,7 +47,7 @@ public class UserDto {
         @ApiExtBigDecimal(name = "单价", max = "10.5", min = "0.2", required = false)
         private BigDecimal price;
 
-        @ApiExtObject(name = "状态", required = false)
+        @ApiExtEnum(name = "状态", required = false)
         private Status status;
 
         @ApiExtDate(name = "出生日期", phase = Phase.PastOrPresent)

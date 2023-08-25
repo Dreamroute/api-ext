@@ -52,7 +52,6 @@ public class UserDto {
 
         @ApiExtDate(name = "出生日期", phase = Phase.PastOrPresent)
         private Date birthday;
-
         @ApiExtBoolean(name = "是否有效", required = false)
         private Boolean valid;
 
@@ -136,7 +135,7 @@ public class UserDto {
 
     @Data
     public static class Pk implements Serializable {
-        @ApiExtLong(name = "主键ID")
+        @ApiExtLong(name = "主键ID", min = 1L)
         private Long id;
     }
 

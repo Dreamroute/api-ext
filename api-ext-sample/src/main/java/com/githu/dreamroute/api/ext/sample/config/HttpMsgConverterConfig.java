@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.dreamroute.mybatis.pro.base.codec.date.DateDeserializer;
 import com.github.dreamroute.mybatis.pro.base.codec.date.DateSerializer;
+import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarkerDeserializer;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarkerDeserializerForCollection;
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarkerSerializerForWeb;
@@ -31,7 +32,7 @@ public class HttpMsgConverterConfig implements WebMvcConfigurer {
         SimpleModule simpleModule = new SimpleModule();
 
         // 枚举序列化、反序列化
-        simpleModule.addSerializer(Enum.class, new EnumMarkerSerializerForWeb());
+        simpleModule.addSerializer(EnumMarker.class, new EnumMarkerSerializerForWeb());
         simpleModule.addDeserializer(Enum.class, new EnumMarkerDeserializer());
         simpleModule.addDeserializer(Collection.class, new EnumMarkerDeserializerForCollection());
 

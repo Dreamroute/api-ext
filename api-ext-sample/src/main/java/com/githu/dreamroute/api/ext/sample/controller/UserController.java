@@ -5,6 +5,7 @@ import com.githu.dreamroute.api.ext.sample.dto.UserDto.CheckExtendsResp;
 import com.githu.dreamroute.api.ext.sample.dto.UserDto.InsertReq;
 import com.githu.dreamroute.api.ext.sample.dto.UserDto.InsertResp;
 import io.swagger.annotations.Api;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static com.githu.dreamroute.api.ext.sample.dto.UserDto.Status.DELETE;
 
 /**
  * 描述：用户 Controller
@@ -25,7 +28,9 @@ public class UserController {
 
     @PostMapping("/insert")
     public InsertResp insert(@Validated @RequestBody InsertReq req) {
-        return new InsertResp();
+        InsertResp resp = new InsertResp();
+        BeanUtils.copyProperties(req, resp);
+        return resp;
     }
 
     /**

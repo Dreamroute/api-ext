@@ -39,7 +39,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <hutool-all.version>5.8.20</hutool-all.version>
         <common-util.version>1.2.2</common-util.version>
-        <mybatis-pro.version>1.6.8</mybatis-pro.version>
+        <mybatis-pro.version>1.7.4</mybatis-pro.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <knife4j-spring-boot-starter.version>3.0.3</knife4j-spring-boot-starter.version>
 

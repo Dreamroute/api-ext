@@ -32,6 +32,16 @@
 1. swagger: localhost:8083/swagger-ui/index.html
 2. knife4j: localhost:8083/doc.html
 
+### Filter顾虑器
+往往需要再你的Filter过滤器中过滤掉如下地址，这些都是swaager相关资源，不需要权限校验：
+```
+/swagger-ui/index.html
+/swagger-resources/configuration/ui
+/swagger-resources/configuration/security
+/swagger-resources
+/v3/api-docs
+```
+
 ### 0. 动机
 1. 我们使用Swagger作为API工具、使用java/Hibernate validator作为请求参数校验时，实体类似这样：
 ```java

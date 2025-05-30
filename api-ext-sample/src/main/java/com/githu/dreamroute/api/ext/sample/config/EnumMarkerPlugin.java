@@ -2,6 +2,7 @@ package com.githu.dreamroute.api.ext.sample.config;
 
 import com.github.dreamroute.mybatis.pro.base.codec.enums.EnumMarker;
 import com.github.dreamroute.starter.plugin.EnumPlugin;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 /**
  * 枚举类型的描述信息，显示成"1-有效；2-无效"这种
  */
+@Primary
 @Component
 public class EnumMarkerPlugin implements EnumPlugin {
 

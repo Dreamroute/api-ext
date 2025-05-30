@@ -16,7 +16,7 @@
 
     <properties>
         <!-- 版本信息 -->
-        <revision>1.1.2-RELEASE</revision>
+        <revision>1.1.3-RELEASE</revision>
 
         <!-- 默认仓库地址 -->
         <repository.nexus.url>https://maven.aliyun.com/repository/public</repository.nexus.url>
